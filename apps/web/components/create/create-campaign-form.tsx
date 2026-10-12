@@ -120,6 +120,13 @@ function defaultValues(): FormValues {
   };
 }
 const toUnix = (local: string) => Math.floor(new Date(local).getTime() / 1000);
+const localMs = (local: string) => new Date(local).getTime();
+const DURATIONS = [
+  { ms: 30 * 60_000, label: "30 min" },
+  { ms: 60 * 60_000, label: "1 hour" },
+  { ms: 24 * 3600_000, label: "24 hours" },
+  { ms: 7 * 86400_000, label: "7 days" },
+] as const;
 
 // ── progress ──
 type FlowKey = CreateStep | "publishing" | "done";
@@ -269,6 +276,28 @@ function CreateForm() {
   const presets = delayPresets(windows.minMeasurementDelay);
   const errors = formState.errors;
   const v = useWatch({ control });
+
+  // Keep the campaign length when the opening time moves; quick "now" + duration helpers.
+  const [lastStart, setLastStart] = useState(initialValues.start);
+  const moveStart = (nextStart: string) => {
+    const prev = localMs(lastStart);
+    const next = localMs(nextStart);
+    const end = localMs(form.getValues("end"));
+    if (Number.isFinite(prev) && Number.isFinite(next) && Number.isFinite(end) && end > prev) {
+      setValue("end", toLocalInput(new Date(next + (end - prev))), { shouldValidate: true, shouldDirty: true });
+    }
+    setLastStart(nextStart);
+  };
+  const startNow = () => {
+    const now = toLocalInput(new Date(nowMs()));
+    setValue("start", now, { shouldValidate: true, shouldDirty: true });
+    moveStart(now);
+  };
+  const setDuration = (ms: number) => {
+    const start = localMs(form.getValues("start"));
+    if (Number.isFinite(start)) setValue("end", toLocalInput(new Date(start + ms)), { shouldValidate: true, shouldDirty: true });
+  };
+  const durationMs = localMs(v.end ?? "") - localMs(v.start ?? "");
 
   const symbol = (v.token ?? "USDC") as TokenSymbol;
   const tokenAddress = TOKENS[chainKey][symbol];
@@ -479,8 +508,11 @@ function CreateForm() {
                 className="h-10"
                 aria-invalid={errors.start ? true : undefined}
                 aria-describedby={errors.start ? `${id("start")}-error` : undefined}
-                {...register("start", { deps: ["end"] })}
+                {...register("start", { deps: ["end"], onChange: (e) => moveStart(e.target.value) })}
               />
+              <button type="button" onClick={startNow} className="mt-1.5 text-xs font-medium text-primary hover:underline">
+                Open now
+              </button>
             </Field>
             <Field id={id("end")} label="Submissions close" error={errors.end?.message}>
               <Input
@@ -491,6 +523,22 @@ function CreateForm() {
                 aria-describedby={errors.end ? `${id("end")}-error` : undefined}
                 {...register("end")}
               />
+              <div className="mt-1.5 flex flex-wrap gap-1.5" role="group" aria-label="Campaign length">
+                {DURATIONS.map((d) => (
+                  <button
+                    key={d.ms}
+                    type="button"
+                    onClick={() => setDuration(d.ms)}
+                    aria-pressed={durationMs === d.ms}
+                    className={cn(
+                      "rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors",
+                      durationMs === d.ms ? "border-primary bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {d.label}
+                  </button>
+                ))}
+              </div>
             </Field>
           </div>
           <div className="space-y-2">
