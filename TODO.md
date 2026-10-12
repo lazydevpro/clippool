@@ -35,6 +35,7 @@ Plan: [docs/plans/2026-10-12-clippool-plan.md](docs/plans/2026-10-12-clippool-pl
 - [x] Public repo https://github.com/lazydevpro/clippool · CI green
 - [x] Vercel production https://clippool.vercel.app (testnet config) · GitHub Actions cron → /api/cron/* HTTP 200
 - [ ] Google OAuth: add https://clippool.vercel.app origin + /auth/callback redirect (user)
+- [ ] Reliable scheduler: GitHub `schedule` hasn't fired on the new repo (manual dispatch works) → add Cloudflare Worker cron or cron-job.org hitting /api/cron/* as primary/backup #backend
 - [ ] Mainnet: follow docs/runbooks/mainnet.md (user runs fund-moving steps)
 
 ## Later
