@@ -1,0 +1,12 @@
+# never upload local secrets / state
+.env
+.env.*
+!.env.example
+.neon
+apps/web/.e2e
+contracts/cache
+contracts/broadcast
+contracts/lib
+contracts/out
+media
+.claude
