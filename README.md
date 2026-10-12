@@ -5,7 +5,7 @@
 A brand locks a USDC (or EURC) pool onchain. Creators post YouTube Shorts for the campaign. When it ends, the pool is
 split **by views** — with a per-creator cap — and paid to every creator's wallet in USDC, final in under a second.
 
-> Status: working end-to-end on **Arc testnet** · mainnet pilot next. Built for [Arc Microgrants](https://dorahacks.io/hackathon/arc-microgrants/detail).
+> Status: live at **https://clippool.vercel.app** (Arc testnet) · working end-to-end · mainnet pilot next ([runbook](docs/runbooks/mainnet.md)). Built for [Arc Microgrants](https://dorahacks.io/hackathon/arc-microgrants/detail).
 
 ---
 

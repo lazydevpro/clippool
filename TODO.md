@@ -31,6 +31,12 @@ Plan: [docs/plans/2026-10-12-clippool-plan.md](docs/plans/2026-10-12-clippool-pl
 - [ ] `GET /api/wallets/:address/campaigns` for /me (currently scans leaderboards client-side) #backend
 - [x] Circle Google login uses one fixed callback `/auth/callback` (returns to origin page) — register `<origin>/auth/callback` per environment #web
 
+## Launch
+- [x] Public repo https://github.com/lazydevpro/clippool · CI green
+- [x] Vercel production https://clippool.vercel.app (testnet config) · GitHub Actions cron → /api/cron/* HTTP 200
+- [ ] Google OAuth: add https://clippool.vercel.app origin + /auth/callback redirect (user)
+- [ ] Mainnet: follow docs/runbooks/mainnet.md (user runs fund-moving steps)
+
 ## Later
 - [ ] Phase 6: mainnet deploy + verify + pilot campaign #launch
 - [ ] Phase 7: README, demo video, DoraHacks submission (user submits) #launch
