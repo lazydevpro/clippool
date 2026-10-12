@@ -1,0 +1,74 @@
+{
+  "name": "all-equal",
+  "description": "3 wallets with equal views, 50% cap not hit: 333333333 each, 1 base unit of dust refunded",
+  "campaign": {
+    "id": "2",
+    "pool": "1000000000",
+    "maxShareBps": 5000,
+    "minViews": "1000"
+  },
+  "submissions": [
+    {
+      "videoId": "sNUea_WCxP7",
+      "channelId": "UCj_6uBDQMIp4Ggbd-nzx-na",
+      "wallet": "0x0196bC1A7Ed0cbebe1803148458bd97D20c0E3F9",
+      "views": "100000"
+    },
+    {
+      "videoId": "B5zg8lsl1oh",
+      "channelId": "UC1yUDwxkbjsC2qLrbK2u3eB",
+      "wallet": "0x65f9d8bBc2EbaB543baa8E60E6483695BF7355e7",
+      "views": "100000"
+    },
+    {
+      "videoId": "EqZwP4PPwBF",
+      "channelId": "UCytr67OkGSw8iJZp8a7RD8z",
+      "wallet": "0xfC866b710603F6AD3d2b7763E0a2B73A7BCd839A",
+      "views": "100000"
+    }
+  ],
+  "expected": {
+    "allocations": [
+      {
+        "wallet": "0x0196bC1A7Ed0cbebe1803148458bd97D20c0E3F9",
+        "amount": "333333333"
+      },
+      {
+        "wallet": "0x65f9d8bBc2EbaB543baa8E60E6483695BF7355e7",
+        "amount": "333333333"
+      },
+      {
+        "wallet": "0xfC866b710603F6AD3d2b7763E0a2B73A7BCd839A",
+        "amount": "333333333"
+      }
+    ],
+    "totalAllocated": "999999999",
+    "leftover": "1",
+    "root": "0xf712bd7550c56d2e746cac01d9eb615e029a1c3b520c0d0d5f15e9b0188721c6",
+    "proofs": [
+      {
+        "wallet": "0x0196bC1A7Ed0cbebe1803148458bd97D20c0E3F9",
+        "amount": "333333333",
+        "proof": [
+          "0x0be8658fd2184d95166e6a9db32d2af6bc9821d860df79fc4f80529df2952634",
+          "0x6910f4e2234982f0d78342c532fbf21b6985bcfcff9e1f84bf829a27d13a1198"
+        ]
+      },
+      {
+        "wallet": "0x65f9d8bBc2EbaB543baa8E60E6483695BF7355e7",
+        "amount": "333333333",
+        "proof": [
+          "0x1e19d269ecacd6c8c064897001a0bbbb760cc507f1fd63195dd6d03a7320027f",
+          "0x6910f4e2234982f0d78342c532fbf21b6985bcfcff9e1f84bf829a27d13a1198"
+        ]
+      },
+      {
+        "wallet": "0xfC866b710603F6AD3d2b7763E0a2B73A7BCd839A",
+        "amount": "333333333",
+        "proof": [
+          "0x07aa56f73846ee8bac720ba798a1c0e58e3cbf66872591c339749edfcbade3b0"
+        ]
+      }
+    ]
+  }
+}

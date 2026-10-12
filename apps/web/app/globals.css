@@ -1,0 +1,193 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-geist-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ClipPool palette (Arc-inspired). Dark navy is the default theme; light is supported. */
+:root {
+  --background: #f5f7fb;
+  --foreground: #0d1b2f;
+  --card: #ffffff;
+  --card-foreground: #0d1b2f;
+  --popover: #ffffff;
+  --popover-foreground: #0d1b2f;
+  --primary: #3e74bb;
+  --primary-foreground: #ffffff;
+  --secondary: #e9eef6;
+  --secondary-foreground: #142236;
+  --muted: #edf1f7;
+  --muted-foreground: #52637d;
+  --accent: #e3ebf7;
+  --accent-foreground: #1f4a82;
+  --destructive: #d43c3c;
+  --border: #dbe2ec;
+  --input: #cfd8e5;
+  --ring: #3e74bb;
+  --success: #12955a;
+  --success-foreground: #ffffff;
+  --warning: #a86d12;
+  --warning-foreground: #ffffff;
+  --brand: #3e74bb;
+  --brand-soft: #acc6e9;
+  --chart-1: #3e74bb;
+  --chart-2: #7fa6dc;
+  --chart-3: #12955a;
+  --chart-4: #b7791f;
+  --chart-5: #8a97ab;
+  --radius: 0.75rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0d1b2f;
+  --sidebar-primary: #3e74bb;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e3ebf7;
+  --sidebar-accent-foreground: #1f4a82;
+  --sidebar-border: #dbe2ec;
+  --sidebar-ring: #3e74bb;
+}
+
+.dark {
+  --background: #0d1b2f;
+  --foreground: #e8eef7;
+  --card: #142236;
+  --card-foreground: #e8eef7;
+  --popover: #172840;
+  --popover-foreground: #e8eef7;
+  --primary: #3e74bb;
+  --primary-foreground: #ffffff;
+  --secondary: #1b2d46;
+  --secondary-foreground: #dce6f4;
+  --muted: #1a2b42;
+  --muted-foreground: #92a5c0;
+  --accent: #1e3452;
+  --accent-foreground: #acc6e9;
+  --destructive: #f26d6d;
+  --border: rgb(172 198 233 / 12%);
+  --input: rgb(172 198 233 / 16%);
+  --ring: #6f9ad4;
+  --success: #34c77b;
+  --success-foreground: #06210f;
+  --warning: #f0b450;
+  --warning-foreground: #2a1a02;
+  --brand: #3e74bb;
+  --brand-soft: #acc6e9;
+  --chart-1: #3e74bb;
+  --chart-2: #acc6e9;
+  --chart-3: #34c77b;
+  --chart-4: #f0b450;
+  --chart-5: #7c8ba1;
+  --sidebar: #142236;
+  --sidebar-foreground: #e8eef7;
+  --sidebar-primary: #3e74bb;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1e3452;
+  --sidebar-accent-foreground: #acc6e9;
+  --sidebar-border: rgb(172 198 233 / 12%);
+  --sidebar-ring: #6f9ad4;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--brand) 35%, transparent);
+  }
+}
+
+@layer utilities {
+  /* Money and counts: always tabular so columns line up. */
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--brand-soft) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--brand-soft) 7%, transparent) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .bg-hero-glow {
+    background:
+      radial-gradient(60% 55% at 75% 0%, color-mix(in oklab, var(--brand) 30%, transparent) 0%, transparent 70%),
+      radial-gradient(45% 45% at 5% 15%, color-mix(in oklab, var(--brand-soft) 10%, transparent) 0%, transparent 70%);
+  }
+  .text-gradient {
+    background: linear-gradient(100deg, var(--foreground) 20%, var(--brand) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .dark .text-gradient {
+    background-image: linear-gradient(100deg, var(--foreground) 15%, var(--brand-soft) 65%, #6f9ad4 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

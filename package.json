@@ -1,0 +1,11 @@
+{
+  "name": "clippool",
+  "private": true,
+  "packageManager": "pnpm@8.6.12",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck"
+  }
+}

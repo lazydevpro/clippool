@@ -1,0 +1,55 @@
+{
+  "name": "everyone-capped",
+  "description": "2 wallets with a 20% cap: both capped at 200 USDC, 600 USDC leftover refunded to the brand",
+  "campaign": {
+    "id": "5",
+    "pool": "1000000000",
+    "maxShareBps": 2000,
+    "minViews": "1000"
+  },
+  "submissions": [
+    {
+      "videoId": "CDTUHWds3d-",
+      "channelId": "UC6Q2c91GLCon9_Sxknfa9VO",
+      "wallet": "0xcc55D24CAd58A25dfddc91E1e41474a5Ebe2050c",
+      "views": "300000"
+    },
+    {
+      "videoId": "Hpz0cTrp3em",
+      "channelId": "UCGdhj1C6D_hz2flrTfRNSVO",
+      "wallet": "0x029cFf52ECa51AF55Ec33456282f0E38BC8Ae0F3",
+      "views": "100000"
+    }
+  ],
+  "expected": {
+    "allocations": [
+      {
+        "wallet": "0x029cFf52ECa51AF55Ec33456282f0E38BC8Ae0F3",
+        "amount": "200000000"
+      },
+      {
+        "wallet": "0xcc55D24CAd58A25dfddc91E1e41474a5Ebe2050c",
+        "amount": "200000000"
+      }
+    ],
+    "totalAllocated": "400000000",
+    "leftover": "600000000",
+    "root": "0x1f058602de82b7ffb64b00f77f7df1cb69ca8cc774d893d50fe21f6315466c27",
+    "proofs": [
+      {
+        "wallet": "0x029cFf52ECa51AF55Ec33456282f0E38BC8Ae0F3",
+        "amount": "200000000",
+        "proof": [
+          "0x042f1b769064aea763e397adc5e5a93c392704bfdeaf5528b34ee840b8356b4a"
+        ]
+      },
+      {
+        "wallet": "0xcc55D24CAd58A25dfddc91E1e41474a5Ebe2050c",
+        "amount": "200000000",
+        "proof": [
+          "0x4072713c2dcf1e8e6b2e49c1383d87b771a575c617cd5678bde6d64bf4d4910a"
+        ]
+      }
+    ]
+  }
+}

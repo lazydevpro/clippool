@@ -1,0 +1,58 @@
+# Scheduler for ClipPool background jobs (replaces Vercel Cron, which is daily-only on Hobby).
+# Repo secrets required: APP_URL (e.g. https://clippool.vercel.app, no trailing slash), CRON_SECRET.
+# GitHub may delay scheduled runs by a few minutes under load; jobs are idempotent.
+name: cron
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"    # sync (+ snapshot/keeper on the quarter hours, see below)
+    - cron: "0 * * * *"      # refresh views
+    - cron: "30 3 * * *"     # purge stats older than 30 days
+  workflow_dispatch:
+    inputs:
+      job:
+        description: "Job to run now"
+        required: true
+        type: choice
+        options: [sync, refresh, snapshot, keeper, purge]
+
+concurrency:
+  group: clippool-cron-${{ github.event.schedule || inputs.job }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Pick jobs
+        id: pick
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
+          INPUT_JOB: ${{ inputs.job }}
+        run: |
+          if [ -n "$INPUT_JOB" ]; then jobs="$INPUT_JOB"
+          elif [ "$SCHEDULE" = "0 * * * *" ]; then jobs="refresh"
+          elif [ "$SCHEDULE" = "30 3 * * *" ]; then jobs="purge"
+          else
+            jobs="sync"
+            minute=$(date -u +%M)
+            # every ~15 minutes also run oracle + keeper (sync first so state is fresh)
+            if [ $((10#$minute % 15)) -lt 5 ]; then jobs="sync snapshot keeper"; fi
+          fi
+          echo "jobs=$jobs" >> "$GITHUB_OUTPUT"
+      - name: Call cron endpoints
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          JOBS: ${{ steps.pick.outputs.jobs }}
+        run: |
+          if [ -z "$APP_URL" ] || [ -z "$CRON_SECRET" ]; then echo "APP_URL/CRON_SECRET secrets not set; skipping"; exit 0; fi
+          status=0
+          for job in $JOBS; do
+            code=$(curl -sS -o /tmp/out.json -w '%{http_code}' --max-time 90 \
+              -H "Authorization: Bearer $CRON_SECRET" "$APP_URL/api/cron/$job" || echo 000)
+            echo "::group::$job → HTTP $code"; head -c 2000 /tmp/out.json; echo; echo "::endgroup::"
+            if [ "$code" != "200" ]; then status=1; fi
+          done
+          exit $status

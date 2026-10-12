@@ -1,0 +1,36 @@
+{
+  "name": "single-creator",
+  "description": "one creator, no cap (maxShareBps 10000): receives the whole pool; single-leaf tree (root = leaf, empty proof)",
+  "campaign": {
+    "id": "1",
+    "pool": "500000000",
+    "maxShareBps": 10000,
+    "minViews": "1000"
+  },
+  "submissions": [
+    {
+      "videoId": "R0P9HvkwMP5",
+      "channelId": "UC0FsneW0o9X92f_hCzJJc1F",
+      "wallet": "0xE19Fd37A7edAD08880410bd6dd5e6e43f09F07C5",
+      "views": "48213"
+    }
+  ],
+  "expected": {
+    "allocations": [
+      {
+        "wallet": "0xE19Fd37A7edAD08880410bd6dd5e6e43f09F07C5",
+        "amount": "500000000"
+      }
+    ],
+    "totalAllocated": "500000000",
+    "leftover": "0",
+    "root": "0x5ba806fab6f065d380c057b01fc3ac1f641dfe118a8f7248cb6bf18febac9d46",
+    "proofs": [
+      {
+        "wallet": "0xE19Fd37A7edAD08880410bd6dd5e6e43f09F07C5",
+        "amount": "500000000",
+        "proof": []
+      }
+    ]
+  }
+}

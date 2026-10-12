@@ -1,0 +1,92 @@
+{
+  "name": "multi-video-multi-channel",
+  "description": "wallet A has 2 channels / 3 videos (80k views), wallet B 1 channel / 2 videos (40k), wallet C 1 video (80k): views aggregate per wallet, not per channel",
+  "campaign": {
+    "id": "10",
+    "pool": "1000000000",
+    "maxShareBps": 5000,
+    "minViews": "1000"
+  },
+  "submissions": [
+    {
+      "videoId": "a47nTxGsfXJ",
+      "channelId": "UCdxhnDhR7PwudjyZG9Y5jUq",
+      "wallet": "0x81610c57F2F2186cBC2B25d2E090aeab2FCD6E2b",
+      "views": "40000"
+    },
+    {
+      "videoId": "rRXonDk5JYX",
+      "channelId": "UCYP5RrFz_JMsTL6gZXQG7L5",
+      "wallet": "0x8c987D851d213fa30716D8f36d84b8C0D288969a",
+      "views": "30000"
+    },
+    {
+      "videoId": "ltuQsrtQVeU",
+      "channelId": "UCBpBQXkQ8u5wh3328eaVEKr",
+      "wallet": "0x81610c57F2F2186cBC2B25d2E090aeab2FCD6E2b",
+      "views": "25000"
+    },
+    {
+      "videoId": "V_90gwBwER-",
+      "channelId": "UCrq01Pqcxr70NTrQW1hFtji",
+      "wallet": "0x9b933729938Bbf28dEDf3C099C56531FdbaFE0e2",
+      "views": "80000"
+    },
+    {
+      "videoId": "jivzcKacDxL",
+      "channelId": "UCdxhnDhR7PwudjyZG9Y5jUq",
+      "wallet": "0x81610c57F2F2186cBC2B25d2E090aeab2FCD6E2b",
+      "views": "15000"
+    },
+    {
+      "videoId": "1GIh23QIcld",
+      "channelId": "UCYP5RrFz_JMsTL6gZXQG7L5",
+      "wallet": "0x8c987D851d213fa30716D8f36d84b8C0D288969a",
+      "views": "10000"
+    }
+  ],
+  "expected": {
+    "allocations": [
+      {
+        "wallet": "0x81610c57F2F2186cBC2B25d2E090aeab2FCD6E2b",
+        "amount": "400000000"
+      },
+      {
+        "wallet": "0x8c987D851d213fa30716D8f36d84b8C0D288969a",
+        "amount": "200000000"
+      },
+      {
+        "wallet": "0x9b933729938Bbf28dEDf3C099C56531FdbaFE0e2",
+        "amount": "400000000"
+      }
+    ],
+    "totalAllocated": "1000000000",
+    "leftover": "0",
+    "root": "0xa027e30869a79283b7fa04b5eed7f0d38ecc4c5ec57ad7b19f9a2b1e3591f2be",
+    "proofs": [
+      {
+        "wallet": "0x81610c57F2F2186cBC2B25d2E090aeab2FCD6E2b",
+        "amount": "400000000",
+        "proof": [
+          "0x36657213d1dc97f53aa2a4146d7fec1aa238c604281d1c1f9b33ad5fd553277a",
+          "0xbb80dd18640386dfe5c4eced59a9ac7fcc6c49c213996533772ba74fd522d228"
+        ]
+      },
+      {
+        "wallet": "0x8c987D851d213fa30716D8f36d84b8C0D288969a",
+        "amount": "200000000",
+        "proof": [
+          "0x76f16e4bfb93010f8be95abab0db2b5015d332e36827ea48d142a21c23581bae"
+        ]
+      },
+      {
+        "wallet": "0x9b933729938Bbf28dEDf3C099C56531FdbaFE0e2",
+        "amount": "400000000",
+        "proof": [
+          "0x9ea33e7ca8795ca49190e90b5d3f6cb9ae8f0ea2678ab3aa4ee2d61abd47d810",
+          "0xbb80dd18640386dfe5c4eced59a9ac7fcc6c49c213996533772ba74fd522d228"
+        ]
+      }
+    ]
+  }
+}

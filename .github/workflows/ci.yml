@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: foundry-rs/foundry-toolchain@v1
+      - run: forge build --sizes
+      - run: forge test -vv
+
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.6.12
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @clippool/allocation typecheck
+      - run: pnpm --filter @clippool/allocation test
+      - run: pnpm --filter @clippool/allocation fixtures -- --check
+      - name: web typecheck + lint + tests
+        working-directory: apps/web
+        run: |
+          npx next typegen
+          npx tsc --noEmit
+          pnpm lint
+          pnpm test
+      - name: web build (mock mode)
+        working-directory: apps/web
+        env:
+          NEXT_PUBLIC_USE_MOCKS: "1"
+        run: pnpm build

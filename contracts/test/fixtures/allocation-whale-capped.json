@@ -1,0 +1,133 @@
+{
+  "name": "whale-capped",
+  "description": "one wallet exceeds the 20% cap; excess redistributed pro-rata to the other 5 wallets",
+  "campaign": {
+    "id": "3",
+    "pool": "1000000000",
+    "maxShareBps": 2000,
+    "minViews": "1000"
+  },
+  "submissions": [
+    {
+      "videoId": "3McGsPwX-3w",
+      "channelId": "UCOPlnUb5cRyDmrnu8w8ln68",
+      "wallet": "0x3647B92816983F6bacF16B9468FF3363Ec489604",
+      "views": "500000"
+    },
+    {
+      "videoId": "LMBxRLY9wX6",
+      "channelId": "UCMy_B1LiPDrVDMNcrsRxloe",
+      "wallet": "0xD0B2b2D4259B34EF915CE306c5F216899Ea0B2f6",
+      "views": "100000"
+    },
+    {
+      "videoId": "hl_n4Um3RQC",
+      "channelId": "UCOgoBhTqAxqWVwhSVRMNDG3",
+      "wallet": "0xab75d137a89A6ff86444d771D62AD0ac669ffb53",
+      "views": "100000"
+    },
+    {
+      "videoId": "qikXGz4z4nr",
+      "channelId": "UCKdWUT3QlsIXZhS_X2absVv",
+      "wallet": "0x242878D0CB1fe08c3168F2485af7F9b769874A9c",
+      "views": "100000"
+    },
+    {
+      "videoId": "y6XgzNV9Cxz",
+      "channelId": "UCWSHAdQIQXHTq3n9sbw6x7F",
+      "wallet": "0x64D54588aA016Cab13F9eCeF46854fC8d2022C7D",
+      "views": "100000"
+    },
+    {
+      "videoId": "nrBYmdZsh-T",
+      "channelId": "UCPy9R-0fpLunSsrqst2Z8Jo",
+      "wallet": "0xee836af020F6b1255AcfC4f13DA73b625c75c597",
+      "views": "100000"
+    }
+  ],
+  "expected": {
+    "allocations": [
+      {
+        "wallet": "0x242878D0CB1fe08c3168F2485af7F9b769874A9c",
+        "amount": "160000000"
+      },
+      {
+        "wallet": "0x3647B92816983F6bacF16B9468FF3363Ec489604",
+        "amount": "200000000"
+      },
+      {
+        "wallet": "0x64D54588aA016Cab13F9eCeF46854fC8d2022C7D",
+        "amount": "160000000"
+      },
+      {
+        "wallet": "0xab75d137a89A6ff86444d771D62AD0ac669ffb53",
+        "amount": "160000000"
+      },
+      {
+        "wallet": "0xD0B2b2D4259B34EF915CE306c5F216899Ea0B2f6",
+        "amount": "160000000"
+      },
+      {
+        "wallet": "0xee836af020F6b1255AcfC4f13DA73b625c75c597",
+        "amount": "160000000"
+      }
+    ],
+    "totalAllocated": "1000000000",
+    "leftover": "0",
+    "root": "0x32b53286e464584edd933a790e03b4cf0852dea671a348cef2b13c42b6daf97b",
+    "proofs": [
+      {
+        "wallet": "0x242878D0CB1fe08c3168F2485af7F9b769874A9c",
+        "amount": "160000000",
+        "proof": [
+          "0xe7a4158fab1b8a69ff6f0d4703cf947654b52e98ccdd7ce57908e24ba7d18834",
+          "0x6c4f805fa5c73a30084d1baaf6c2d98469e56c8b85666d46709e2d529590a823"
+        ]
+      },
+      {
+        "wallet": "0x3647B92816983F6bacF16B9468FF3363Ec489604",
+        "amount": "200000000",
+        "proof": [
+          "0x884cc7cdd7589c63bdbd270eaa82aa329a571607077fcb83104da2f3940127bf",
+          "0x6eb08625bcebb7f377957dd51d18f8abff4794982edb4065a686776fc0e69829",
+          "0xb0838ecf7905d8e3250faba23e439045edf50b5082cb8f591d2d3b4043adbaba"
+        ]
+      },
+      {
+        "wallet": "0x64D54588aA016Cab13F9eCeF46854fC8d2022C7D",
+        "amount": "160000000",
+        "proof": [
+          "0x19a945468c9ea0fd2d08a75cbad53856257b86063bf5d1fa22a58e0f48a674bc",
+          "0x7ee6db56524e35b1d715bdb2b7b51474710fd85622101f2c0fb6a9e3c8ca3b27",
+          "0xb0838ecf7905d8e3250faba23e439045edf50b5082cb8f591d2d3b4043adbaba"
+        ]
+      },
+      {
+        "wallet": "0xab75d137a89A6ff86444d771D62AD0ac669ffb53",
+        "amount": "160000000",
+        "proof": [
+          "0x2ac9d77332bea1d2b2ff099fbd0d4a6902e0dbf7e88295b0e7c31f5f7c319b3b",
+          "0x7ee6db56524e35b1d715bdb2b7b51474710fd85622101f2c0fb6a9e3c8ca3b27",
+          "0xb0838ecf7905d8e3250faba23e439045edf50b5082cb8f591d2d3b4043adbaba"
+        ]
+      },
+      {
+        "wallet": "0xD0B2b2D4259B34EF915CE306c5F216899Ea0B2f6",
+        "amount": "160000000",
+        "proof": [
+          "0xbc5594f672fdda038ab369cb63c608dd5e1c3355d3cbd4d89a2b33b94dc403cb",
+          "0x6eb08625bcebb7f377957dd51d18f8abff4794982edb4065a686776fc0e69829",
+          "0xb0838ecf7905d8e3250faba23e439045edf50b5082cb8f591d2d3b4043adbaba"
+        ]
+      },
+      {
+        "wallet": "0xee836af020F6b1255AcfC4f13DA73b625c75c597",
+        "amount": "160000000",
+        "proof": [
+          "0xbe18753b0191960b319e3cc329a5bcb9501fbeaf274da42f8d27faa1c725d7c9",
+          "0x6c4f805fa5c73a30084d1baaf6c2d98469e56c8b85666d46709e2d529590a823"
+        ]
+      }
+    ]
+  }
+}

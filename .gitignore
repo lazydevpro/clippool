@@ -1,0 +1,29 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# deps / build
+node_modules/
+.next/
+dist/
+out/
+coverage/
+*.tsbuildinfo
+
+# foundry
+contracts/out/
+contracts/cache/
+contracts/broadcast/*/31337/
+contracts/broadcast/**/dry-run/
+
+# misc
+.DS_Store
+.vercel
+
+# local e2e run state
+apps/web/.e2e/
+.neon
+
+# rendered media
+media/short/out/

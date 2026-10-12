@@ -1,0 +1,37 @@
+{
+  "name": "zero-valid-submissions",
+  "description": "no submission reaches minViews: allocations and proofs are empty, totalAllocated 0, leftover = pool, and root is bytes32(0) by convention (OZ cannot build an empty tree; nothing is claimable)",
+  "campaign": {
+    "id": "7",
+    "pool": "250000000",
+    "maxShareBps": 2000,
+    "minViews": "10000"
+  },
+  "submissions": [
+    {
+      "videoId": "9iHz2PO8pL8",
+      "channelId": "UCZDq0pZAdrHNa0c4G3yefUV",
+      "wallet": "0xA24136A00850eCBab0Eb8CD42dE6866a74e4f9C6",
+      "views": "9999"
+    },
+    {
+      "videoId": "aTwoMjYcIqF",
+      "channelId": "UCY9H_zIDMtzvtCEuuq-iHN_",
+      "wallet": "0xcBC6bC01e42a9BA130b04dB697Db43813d2191E0",
+      "views": "0"
+    },
+    {
+      "videoId": "L-KhUKSqkUn",
+      "channelId": "UCYLnfdxNgZyJhm6adN1Sugx",
+      "wallet": "0xEcDD7222a89612946aA61b0416D8E8d1036153Aa",
+      "views": "120"
+    }
+  ],
+  "expected": {
+    "allocations": [],
+    "totalAllocated": "0",
+    "leftover": "250000000",
+    "root": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "proofs": []
+  }
+}

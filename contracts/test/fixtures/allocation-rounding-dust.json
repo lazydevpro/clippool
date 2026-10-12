@@ -1,0 +1,80 @@
+{
+  "name": "rounding-dust",
+  "description": "pool of 100 base units split 1000:1000:1000:1 -> 33/33/33/0; the zero allocation is dropped and 1 unit of dust is refunded",
+  "campaign": {
+    "id": "8",
+    "pool": "100",
+    "maxShareBps": 10000,
+    "minViews": "1"
+  },
+  "submissions": [
+    {
+      "videoId": "NlEX8P3pADN",
+      "channelId": "UCVY6BrQSiPuBGt8ROplAlJS",
+      "wallet": "0xDa688B9Ed3692cbFCF2bD344B9EA8E46FedFba6c",
+      "views": "1000"
+    },
+    {
+      "videoId": "RK2QrsEzXRA",
+      "channelId": "UCJR5gwtEg36sWhQQkdwLpap",
+      "wallet": "0xA95A10a2660135cb1ca28f0BfB98a5076dDe76A9",
+      "views": "1000"
+    },
+    {
+      "videoId": "_7egh3-ZES4",
+      "channelId": "UCokCdxAmOLajNoFtzUb6SPx",
+      "wallet": "0xdbF72c2202f9218e5D0D83a98418487d16Fa107F",
+      "views": "1000"
+    },
+    {
+      "videoId": "vqxD0aQnKdk",
+      "channelId": "UCOYQjfcijfG_BSLjCzvufBu",
+      "wallet": "0x79f4281ab3b5E4445A93b69f99eC13f77905241E",
+      "views": "1"
+    }
+  ],
+  "expected": {
+    "allocations": [
+      {
+        "wallet": "0xA95A10a2660135cb1ca28f0BfB98a5076dDe76A9",
+        "amount": "33"
+      },
+      {
+        "wallet": "0xDa688B9Ed3692cbFCF2bD344B9EA8E46FedFba6c",
+        "amount": "33"
+      },
+      {
+        "wallet": "0xdbF72c2202f9218e5D0D83a98418487d16Fa107F",
+        "amount": "33"
+      }
+    ],
+    "totalAllocated": "99",
+    "leftover": "1",
+    "root": "0x8d038248ad113fafd39a17a6ee31270a36d5a98645b9a63dbea8fff572a1eb14",
+    "proofs": [
+      {
+        "wallet": "0xA95A10a2660135cb1ca28f0BfB98a5076dDe76A9",
+        "amount": "33",
+        "proof": [
+          "0x856aafd8666aa4cd937a98ce01aca9b453872de85204d7618b5123877a9c4cf0",
+          "0xb1972341c86d4fd77b5f0673f57728cea7a0217d30c5beada06dcca13f674206"
+        ]
+      },
+      {
+        "wallet": "0xDa688B9Ed3692cbFCF2bD344B9EA8E46FedFba6c",
+        "amount": "33",
+        "proof": [
+          "0x03665ba49484a968fdf163d7092e0201544050b051c69feb52a4225e0b4344d1"
+        ]
+      },
+      {
+        "wallet": "0xdbF72c2202f9218e5D0D83a98418487d16Fa107F",
+        "amount": "33",
+        "proof": [
+          "0x428ab34ed6853c591163ed47e1c44c1643096c8386969cb54c82eb149e227e21",
+          "0xb1972341c86d4fd77b5f0673f57728cea7a0217d30c5beada06dcca13f674206"
+        ]
+      }
+    ]
+  }
+}

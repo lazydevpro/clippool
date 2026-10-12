@@ -1,0 +1,67 @@
+{
+  "name": "below-min-filtered",
+  "description": "minViews 1000 applies per submission: 999-view video dropped (wallet excluded), 1000-view kept, a 500-view video of a qualifying wallet dropped",
+  "campaign": {
+    "id": "6",
+    "pool": "100000000",
+    "maxShareBps": 10000,
+    "minViews": "1000"
+  },
+  "submissions": [
+    {
+      "videoId": "sDkx3Pt_-xb",
+      "channelId": "UCrzr3YW2UW_n4iRQ1k0oStp",
+      "wallet": "0x03C5626c9e47F836df4CCc0646d7188F8aFE050F",
+      "views": "5000"
+    },
+    {
+      "videoId": "-755hWsgfMv",
+      "channelId": "UCrzr3YW2UW_n4iRQ1k0oStp",
+      "wallet": "0x03C5626c9e47F836df4CCc0646d7188F8aFE050F",
+      "views": "500"
+    },
+    {
+      "videoId": "ko66PQcMEnh",
+      "channelId": "UC0gbsMrMQYMFGavRJXWcpDF",
+      "wallet": "0xda8BD06b8F1a8D1b0005A17Df3806FFA664d15B0",
+      "views": "999"
+    },
+    {
+      "videoId": "IJtV3Il1R9J",
+      "channelId": "UC5pTjCc_L_t-Trt17UEFlfW",
+      "wallet": "0x68762bc0541dDE749E8eE735c0B0abA36BA74Ec5",
+      "views": "1000"
+    }
+  ],
+  "expected": {
+    "allocations": [
+      {
+        "wallet": "0x03C5626c9e47F836df4CCc0646d7188F8aFE050F",
+        "amount": "83333333"
+      },
+      {
+        "wallet": "0x68762bc0541dDE749E8eE735c0B0abA36BA74Ec5",
+        "amount": "16666666"
+      }
+    ],
+    "totalAllocated": "99999999",
+    "leftover": "1",
+    "root": "0xede09042a39f745be0e7d6eaa60f6943dd2ad3c0b0a70408bf09f5d91d19109b",
+    "proofs": [
+      {
+        "wallet": "0x03C5626c9e47F836df4CCc0646d7188F8aFE050F",
+        "amount": "83333333",
+        "proof": [
+          "0x7c12232f1f479742a0b5a6a082dddd9aa3c12365a47a6444614276ed8e8a8c88"
+        ]
+      },
+      {
+        "wallet": "0x68762bc0541dDE749E8eE735c0B0abA36BA74Ec5",
+        "amount": "16666666",
+        "proof": [
+          "0x30dfb2aa1cb1a3f2ea81633515bb5f91e0d456a5d59a0527655c12838a72701d"
+        ]
+      }
+    ]
+  }
+}
