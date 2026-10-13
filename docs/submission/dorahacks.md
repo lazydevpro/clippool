@@ -10,7 +10,7 @@ field — copy/paste. Assets live in `docs/assets/`.
 - [x] Demo video → https://youtu.be/6AJOfA3wmtU
 - [ ] Builder profile link (GitHub `https://github.com/lazydevpro` and/or X / Farcaster)
 - [ ] License chosen (recommend MIT) — repo currently says "TBD"
-- [ ] Optional but strong: one small mainnet pilot campaign live on https://clippool.fun
+- [x] Mainnet launch campaign live → https://clippool.fun/c/1 (5 USDC escrowed, [tx](https://explorer.arc.io/tx/0x0030a53a98170aedf30cf2defcaf32ac8595f0354a4942bcdf6210275ecc8f4b))
 
 ---
 
@@ -40,6 +40,7 @@ Tags: `Arc` `USDC` `EURC` `Payments` `Creator Economy` `Circle` `Stablecoins`
 | GitHub | https://github.com/lazydevpro/clippool |
 | Demo video | https://youtu.be/6AJOfA3wmtU |
 | Mainnet contract (verified) | https://explorer.arc.io/address/0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9 |
+| Live mainnet campaign | https://clippool.fun/c/1 |
 | Testnet contract (verified) | https://explorer.testnet.arc.io/address/0x50519affe82591afd402c7f22ad9bc6dd2d86030 |
 | Builder profile | ⟨https://github.com/lazydevpro / X / Farcaster⟩ |
 
@@ -88,6 +89,7 @@ But the model is broken in three ways:
 - **Arc testnet, full stack (campaign #2):** a **real YouTube Short** → oracle job snapshotted its views and posted the root → keeper paid the creator's Circle wallet **2 USDC**.
 - **Anyone can verify:** the open-source CLI recomputes the split from the published snapshot and checks it against the onchain root — **PASS**.
 - **Arc mainnet:** ClipPool deployed and verified (Sourcify exact match): `0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9` — 48h dispute window, 1h minimum measurement delay, USDC + EURC enabled.
+- **Live on mainnet now:** launch campaign **#1** — 5 USDC escrowed, open for Shorts until Oct 20: https://clippool.fun/c/1 ([creation tx](https://explorer.arc.io/tx/0x0030a53a98170aedf30cf2defcaf32ac8595f0354a4942bcdf6210275ecc8f4b)).
 
 ## Technical credibility
 - **Smart contract:** `ClipPool.sol` — 100% line/branch coverage; unit, fuzz, invariant, cross-language golden-fixture and Arc fork tests (76 + 3 fork tests). Deploy-time immutable dispute window.

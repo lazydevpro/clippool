@@ -40,7 +40,7 @@ Plan: [docs/plans/2026-10-12-clippool-plan.md](docs/plans/2026-10-12-clippool-pl
 - [x] Mainnet: operators funded; ClipPool deployed 0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9 (48h/1h, guardian = user wallet), Sourcify exact_match, explorer verified #launch
 - [x] Production on Arc mainnet at https://clippool.fun (switch --without-circle; sync from deploy block caught up) #launch
 - [ ] Circle LIVE App ID (needs Circle billing) → rerun switch script without the flag to enable Google wallets on mainnet #launch
-- [ ] Mainnet pilot campaign (user) #launch (user runs fund-moving steps)
+- [x] Mainnet launch campaign #1 live (5 USDC, closes Oct 20, snapshot Oct 21, payout ≈ Oct 23) — https://clippool.fun/c/1 #launch (user runs fund-moving steps)
 
 ## Later
 - [ ] Phase 6: mainnet deploy + verify + pilot campaign #launch
