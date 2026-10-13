@@ -38,7 +38,8 @@ Plan: [docs/plans/2026-10-12-clippool-plan.md](docs/plans/2026-10-12-clippool-pl
 - [ ] Reliable scheduler: GitHub `schedule` hasn't fired on the new repo (manual dispatch works) → add Cloudflare Worker cron or cron-job.org hitting /api/cron/* as primary/backup #backend
 - [x] Mainnet prep: operator keys in .env.mainnet, Neon `mainnet` branch (empty, migrated), deploy dry-run OK (48h/1h, ≈0.13 USDC gas), scripts/deploy-mainnet.sh + scripts/switch-vercel-mainnet.sh #launch
 - [x] Mainnet: operators funded; ClipPool deployed 0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9 (48h/1h, guardian = user wallet), Sourcify exact_match, explorer verified #launch
-- [ ] Mainnet: Circle LIVE keys in .env.mainnet → user runs scripts/switch-vercel-mainnet.sh #launch
+- [x] Production on Arc mainnet at https://clippool.fun (switch --without-circle; sync from deploy block caught up) #launch
+- [ ] Circle LIVE App ID (needs Circle billing) → rerun switch script without the flag to enable Google wallets on mainnet #launch
 - [ ] Mainnet pilot campaign (user) #launch (user runs fund-moving steps)
 
 ## Later

@@ -5,7 +5,7 @@ field — copy/paste. Assets live in `docs/assets/`.
 
 ## Pre-submit checklist
 - [x] ClipPool deployed **and verified** on Arc mainnet → [`0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9`](https://explorer.arc.io/address/0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9)
-- [ ] **App on mainnet** → run `./scripts/switch-vercel-mainnet.sh --without-circle` (https://clippool.fun is still on testnet until then)
+- [x] **App on mainnet** → https://clippool.fun (Arc mainnet, contract above; first sync caught up)
 - [x] Public repo → https://github.com/lazydevpro/clippool
 - [x] Demo video → https://youtu.be/6AJOfA3wmtU
 - [ ] Builder profile link (GitHub `https://github.com/lazydevpro` and/or X / Farcaster)
