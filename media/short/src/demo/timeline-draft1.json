@@ -1,0 +1,224 @@
+{
+  "fps": 30,
+  "items": [
+    {
+      "type": "card",
+      "kind": "title",
+      "dur": 8,
+      "vo": "Brands pay creators per view — but budgets run out first come, first served, and payouts are a black box."
+    },
+    {
+      "type": "clip",
+      "src": "c1",
+      "from": 0,
+      "to": 9,
+      "rate": 1,
+      "caption": "A fixed USDC pool, split fairly by views",
+      "vo": "ClipPool fixes that: a brand locks a fixed USDC pool on Arc, and it's split fairly by views."
+    },
+    {
+      "type": "clip",
+      "src": "c2",
+      "from": 0,
+      "to": 12,
+      "rate": 1.6,
+      "caption": "Pay only for traction — capped per creator",
+      "vo": "Your payout is your share of total views, capped so no single creator takes it all."
+    },
+    {
+      "type": "clip",
+      "src": "c2",
+      "from": 12,
+      "to": 27,
+      "rate": 2.5,
+      "caption": "Built for paying lots of people, fast",
+      "vo": "And because it runs on Arc, paying hundreds of creators is instant and costs fractions of a cent."
+    },
+    {
+      "type": "card",
+      "kind": "chapter",
+      "dur": 2,
+      "num": "1",
+      "title": "A brand launches a campaign",
+      "vo": ""
+    },
+    {
+      "type": "clip",
+      "src": "c3",
+      "from": 0,
+      "to": 3.5,
+      "rate": 1,
+      "caption": "Launch a campaign",
+      "vo": "A brand opens the campaign builder…"
+    },
+    {
+      "type": "clip",
+      "src": "c4",
+      "from": 0,
+      "to": 24,
+      "rate": 3,
+      "caption": "Title + rules — the rules hash is stored onchain",
+      "vo": "…writes the brief and the rules — their hash is pinned onchain, so they can't change later…"
+    },
+    {
+      "type": "clip",
+      "src": "c4",
+      "from": 24,
+      "to": 40,
+      "rate": 2,
+      "caption": "Pool, schedule, per-creator cap, min views",
+      "vo": "…sets the pool, the schedule, a per-creator cap and minimum views."
+    },
+    {
+      "type": "clip",
+      "src": "c4",
+      "from": 42.5,
+      "to": 44,
+      "rate": 1,
+      "caption": "One signature (EIP-2612 permit)…",
+      "vo": "One signature…"
+    },
+    {
+      "type": "clip",
+      "src": "c4",
+      "from": 48.5,
+      "to": 51,
+      "rate": 1,
+      "caption": "One signature (EIP-2612 permit)…",
+      "vo": ""
+    },
+    {
+      "type": "clip",
+      "src": "c4",
+      "from": 56,
+      "to": 64,
+      "rate": 1.5,
+      "caption": "…one transaction: USDC locked in ClipPool",
+      "vo": "…one transaction, and the USDC is locked in the ClipPool contract."
+    },
+    {
+      "type": "clip",
+      "src": "c4",
+      "from": 64,
+      "to": 71,
+      "rate": 1,
+      "caption": "Campaign is live onchain",
+      "vo": "The campaign is live."
+    },
+    {
+      "type": "card",
+      "kind": "chapter",
+      "dur": 2,
+      "num": "2",
+      "title": "A creator joins",
+      "vo": ""
+    },
+    {
+      "type": "clip",
+      "src": "c5",
+      "from": 0,
+      "to": 5.5,
+      "rate": 1,
+      "caption": "Post a YouTube Short",
+      "vo": "A creator posts a YouTube Short…"
+    },
+    {
+      "type": "clip",
+      "src": "c7",
+      "from": 6,
+      "to": 22,
+      "rate": 2.5,
+      "caption": "Submit — no gas, no signup fee",
+      "vo": "…and submits it. No gas, no signup fee."
+    },
+    {
+      "type": "clip",
+      "src": "c7",
+      "from": 22,
+      "to": 27.7,
+      "rate": 1.2,
+      "caption": "No wallet? Continue with Google",
+      "vo": "No crypto wallet? Continue with Google…"
+    },
+    {
+      "type": "clip",
+      "src": "c7",
+      "from": 32.5,
+      "to": 42.6,
+      "rate": 1.4,
+      "caption": "A USDC wallet on Arc, via Circle — no seed phrase",
+      "vo": "…and Circle creates a USDC wallet on Arc — no seed phrase. Connect YouTube proves channel ownership, read-only."
+    },
+    {
+      "type": "clip",
+      "src": "c8",
+      "from": 0,
+      "to": 7,
+      "rate": 1.1,
+      "caption": "Paste the Short — checked against YouTube",
+      "vo": "The Short is checked against YouTube: public, under three minutes, posted in the window…"
+    },
+    {
+      "type": "clip",
+      "src": "c8",
+      "from": 7,
+      "to": 11,
+      "rate": 1,
+      "caption": "You're in",
+      "vo": "…and you're in."
+    },
+    {
+      "type": "clip",
+      "src": "c8",
+      "from": 13,
+      "to": 17,
+      "rate": 1,
+      "caption": "Live leaderboard with estimated payouts",
+      "vo": "Everyone sees the live split."
+    },
+    {
+      "type": "card",
+      "kind": "chapter",
+      "dur": 2,
+      "num": "3",
+      "title": "Snapshot → payout",
+      "vo": ""
+    },
+    {
+      "type": "card",
+      "kind": "verify",
+      "dur": 9.5,
+      "vo": "When the campaign ends, an oracle snapshots views and posts a Merkle root onchain. Anyone can recompute the split — and it matches."
+    },
+    {
+      "type": "clip",
+      "src": "c9",
+      "from": 5,
+      "to": 15,
+      "rate": 1.25,
+      "caption": "One claimMany pays every creator — final in < 1 s",
+      "vo": "After a short review window, one transaction pays every creator in USDC — final in under a second."
+    },
+    {
+      "type": "clip",
+      "src": "c9",
+      "from": 0,
+      "to": 5,
+      "rate": 1,
+      "caption": "Creator wallet: +2.00 USDC",
+      "vo": "The creator's wallet shows the payout."
+    },
+    {
+      "type": "card",
+      "kind": "whyarc",
+      "dur": 8,
+      "vo": "USDC as gas, instant finality, native USDC and EURC, and Circle wallets — that's why this runs on Arc."
+    },
+    {
+      "type": "card",
+      "kind": "outro",
+      "dur": 4,
+      "vo": "ClipPool. Get paid for every view — fairly."
+    }
+  ]
+}

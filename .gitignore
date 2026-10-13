@@ -28,3 +28,7 @@ apps/web/.e2e/
 # rendered media
 media/short/out/
 .env*
+
+# raw / derived screen recordings (personal, large)
+media/product-video/
+media/short/public/demo/

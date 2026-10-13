@@ -5,6 +5,10 @@
 A brand locks a USDC (or EURC) pool onchain. Creators post YouTube Shorts for the campaign. When it ends, the pool is
 split **by views** — with a per-creator cap — and paid to every creator's wallet in USDC, final in under a second.
 
+[![ClipPool demo video](docs/assets/demo-thumbnail.jpg)](https://youtu.be/6AJOfA3wmtU)
+
+▶️ **[Watch the 2½-minute demo](https://youtu.be/6AJOfA3wmtU)** — a brand funds a campaign, a creator submits a real Short, and the pool is paid out onchain.
+
 > Status: live at **https://clippool.vercel.app** (Arc testnet) · working end-to-end · mainnet pilot next ([runbook](docs/runbooks/mainnet.md)). Built for [Arc Microgrants](https://dorahacks.io/hackathon/arc-microgrants/detail).
 
 ---
@@ -79,7 +83,7 @@ Raw YouTube statistics never go onchain (YouTube API policy: ≤ 30 days storage
 contracts/            Foundry — ClipPool.sol, unit/fuzz/invariant/fixture/Arc-fork tests, deploy script
 packages/allocation/  TypeScript allocation engine + Merkle tree + `verify` CLI (golden fixtures shared with Solidity)
 apps/web/             Next.js 16 app + API: campaigns, submissions, YouTube, Circle wallets, oracle/keeper/sync jobs
-media/short/          Remotion source for the explainer Short
+media/short/          Remotion sources: explainer Short, product demo video (voiceover-synced timeline), YouTube thumbnail
 docs/plans/           spec, plan, shared interfaces · docs/research/ idea research
 .github/workflows/    CI + cron scheduler (oracle, keeper, sync, view refresh, 30-day purge)
 ```

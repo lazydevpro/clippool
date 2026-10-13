@@ -40,7 +40,9 @@ Plan: [docs/plans/2026-10-12-clippool-plan.md](docs/plans/2026-10-12-clippool-pl
 
 ## Later
 - [ ] Phase 6: mainnet deploy + verify + pilot campaign #launch
-- [ ] Phase 7: README, demo video, DoraHacks submission (user submits) #launch
+- [x] Phase 7a: README + demo video (https://youtu.be/6AJOfA3wmtU) + YouTube thumbnail #launch
+- [ ] Phase 7b: DoraHacks submission after mainnet deploy (user submits) #launch
+- [ ] MetaMask/Blockaid flags clippool.vercel.app as malicious on permit → report false positive + consider custom domain before mainnet #launch
 - [ ] v2: zkTLS engaged views, TikTok/IG, per-video windows #v2
 
 ## Done

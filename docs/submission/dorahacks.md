@@ -8,7 +8,7 @@ public repo, short description of what it does + what it uses Arc for, public bu
 - [ ] ClipPool deployed **and verified** on Arc mainnet → ⟨mainnet address⟩
 - [ ] App live at a public URL pointing at mainnet → https://clippool.vercel.app (live on testnet now; switch via docs/runbooks/mainnet.md §6)
 - [x] Public GitHub repo → https://github.com/lazydevpro/clippool
-- [ ] Demo video (2–3 min) → ⟨YouTube/Loom link⟩
+- [x] Demo video (2:30) → https://youtu.be/6AJOfA3wmtU
 - [ ] One real mainnet pilot campaign (small pool) with at least one payout → ⟨campaign URL + payout tx⟩
 - [ ] Builder profile (GitHub / X / Farcaster) → ⟨link⟩
 
@@ -27,7 +27,7 @@ Arc · USDC · EURC · Creator economy · Payouts · Payments
 - **Live app (Arc mainnet):** ⟨https://…⟩
 - **ClipPool contract (Arc mainnet, verified):** ⟨https://explorer.arc.io/address/…⟩
 - **Repo:** https://github.com/lazydevpro/clippool
-- **Demo video:** ⟨…⟩
+- **Demo video:** https://youtu.be/6AJOfA3wmtU
 - **Testnet deployment (verified):** https://explorer.testnet.arc.io/address/0x50519affe82591afd402c7f22ad9bc6dd2d86030
 
 ## Description

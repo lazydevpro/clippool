@@ -1,0 +1,245 @@
+{
+  "fps": 30,
+  "audio": "demo/vo.wav",
+  "items": [
+    {
+      "type": "card",
+      "kind": "title",
+      "dur": 6.0
+    },
+    {
+      "type": "clip",
+      "src": "c1",
+      "from": 0,
+      "to": 9,
+      "caption": "Brands post campaigns · creators get paid by views",
+      "dur": 8.0,
+      "rate": 1.125
+    },
+    {
+      "type": "clip",
+      "src": "c2",
+      "from": 0,
+      "to": 12,
+      "caption": "One pool. Every view counts.",
+      "dur": 5.5,
+      "rate": 2.182
+    },
+    {
+      "type": "clip",
+      "src": "c2",
+      "from": 12,
+      "to": 27,
+      "caption": "Decentralized and fair — built on Arc",
+      "dur": 6.28,
+      "rate": 2.389
+    },
+    {
+      "type": "card",
+      "kind": "chapter",
+      "num": "1",
+      "title": "A brand launches a campaign",
+      "dur": 2.3
+    },
+    {
+      "type": "clip",
+      "src": "c1",
+      "from": 9,
+      "to": 15,
+      "caption": "The process is simple",
+      "dur": 5.27,
+      "rate": 1.139
+    },
+    {
+      "type": "clip",
+      "src": "c3",
+      "from": 0,
+      "to": 4.2,
+      "caption": "Click “Launch a campaign”",
+      "dur": 4.19,
+      "rate": 1.002
+    },
+    {
+      "type": "clip",
+      "src": "c4",
+      "from": 0,
+      "to": 24,
+      "caption": "Title and rules — rules hash pinned onchain",
+      "dur": 6.66,
+      "rate": 3.604
+    },
+    {
+      "type": "clip",
+      "src": "c4",
+      "from": 24,
+      "to": 40,
+      "caption": "Pool amount, schedule, cap, min views",
+      "dur": 8.81,
+      "rate": 1.816
+    },
+    {
+      "type": "clip",
+      "src": "c4",
+      "from": 42.5,
+      "to": 44,
+      "caption": "Lock the money — one signature…",
+      "dur": 1.9,
+      "rate": 0.789
+    },
+    {
+      "type": "clip",
+      "src": "c4",
+      "from": 48.5,
+      "to": 51,
+      "caption": "Lock the money — one signature…",
+      "dur": 3.1,
+      "rate": 0.806
+    },
+    {
+      "type": "clip",
+      "src": "c4",
+      "from": 56,
+      "to": 64,
+      "caption": "…one transaction into the ClipPool smart contract",
+      "dur": 7.4,
+      "rate": 1.081
+    },
+    {
+      "type": "clip",
+      "src": "c4",
+      "from": 64,
+      "to": 68,
+      "caption": "Payouts are automatic — nothing else to do",
+      "dur": 3.52,
+      "rate": 1.136
+    },
+    {
+      "type": "clip",
+      "src": "c7",
+      "from": 6,
+      "to": 14,
+      "caption": "Campaign is live — anyone can join",
+      "dur": 2.81,
+      "rate": 2.847
+    },
+    {
+      "type": "card",
+      "kind": "chapter",
+      "num": "2",
+      "title": "A creator joins",
+      "dur": 1.6
+    },
+    {
+      "type": "clip",
+      "src": "c5",
+      "from": 0,
+      "to": 5.5,
+      "caption": "Post a Short and copy its link",
+      "dur": 3.91,
+      "rate": 1.407
+    },
+    {
+      "type": "clip",
+      "src": "c7",
+      "from": 14,
+      "to": 24,
+      "caption": "Submit the video",
+      "dur": 4.41,
+      "rate": 2.268
+    },
+    {
+      "type": "clip",
+      "src": "c7",
+      "from": 24,
+      "to": 27.7,
+      "caption": "No wallet? Continue with Google",
+      "dur": 4.2,
+      "rate": 0.881
+    },
+    {
+      "type": "clip",
+      "src": "c7",
+      "from": 32.5,
+      "to": 38,
+      "caption": "A USDC wallet on Arc is created — no seed phrase",
+      "dur": 7.11,
+      "rate": 0.774
+    },
+    {
+      "type": "clip",
+      "src": "c7",
+      "from": 38,
+      "to": 42.6,
+      "caption": "Connect YouTube to prove you own the channel",
+      "dur": 8.36,
+      "rate": 0.55
+    },
+    {
+      "type": "clip",
+      "src": "c8",
+      "from": 0,
+      "to": 11,
+      "caption": "Checked against YouTube and verified",
+      "dur": 6.13,
+      "rate": 1.794
+    },
+    {
+      "type": "clip",
+      "src": "c8",
+      "from": 11,
+      "to": 17,
+      "caption": "Live leaderboard with estimated payouts",
+      "dur": 5.38,
+      "rate": 1.115
+    },
+    {
+      "type": "card",
+      "kind": "chapter",
+      "num": "3",
+      "title": "Snapshot → payout",
+      "dur": 2.0
+    },
+    {
+      "type": "card",
+      "kind": "verify",
+      "dur": 6.6
+    },
+    {
+      "type": "clip",
+      "src": "c9",
+      "from": 5,
+      "to": 11,
+      "caption": "Distributed automatically — final instantly",
+      "dur": 5.76,
+      "rate": 1.042
+    },
+    {
+      "type": "clip",
+      "src": "c9",
+      "from": 11,
+      "to": 15,
+      "caption": "The whole pool goes to creators, by views",
+      "dur": 4.4,
+      "rate": 0.909
+    },
+    {
+      "type": "clip",
+      "src": "c9",
+      "from": 0,
+      "to": 5,
+      "caption": "Creator wallet: +2.00 USDC",
+      "dur": 5.18,
+      "rate": 0.965
+    },
+    {
+      "type": "card",
+      "kind": "whyarc",
+      "dur": 7.98
+    },
+    {
+      "type": "card",
+      "kind": "outro",
+      "dur": 5.64
+    }
+  ]
+}
