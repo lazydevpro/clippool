@@ -65,7 +65,7 @@ Creator ── Connect YouTube / binding code ─▶ │  (Arc, USDC/EURC)  │ 
 | Network | ClipPool | Windows |
 |---|---|---|
 | Arc testnet (5042002) | [`0x50519aFfe82591afd402c7F22ad9BC6DD2d86030`](https://explorer.testnet.arc.io/address/0x50519affe82591afd402c7f22ad9bc6dd2d86030) (verified) | dispute 10 min · min measurement 5 min |
-| Arc mainnet (5042) | _pending pilot deploy_ | dispute 48 h · min measurement 1 h |
+| Arc mainnet (5042) | [`0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9`](https://explorer.arc.io/address/0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9) (verified) | dispute 48 h · min measurement 1 h |
 
 ## Trust model
 

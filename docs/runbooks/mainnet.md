@@ -41,8 +41,10 @@ arc-forge script script/Deploy.s.sol:Deploy --rpc-url "$ARC_MAINNET_RPC_URL" --b
   --verify --verifier blockscout --verifier-url https://explorer.arc.io/api/
 cat deployments/5042.json        # address, deployBlock, disputeWindow 172800, minMeasurementDelay 3600
 ```
-The script hard-codes 48h / 1h on chain 5042 and refuses overrides. If `--verify` fails, re-run verification later with
-`arc-forge verify-contract <address> src/ClipPool.sol:ClipPool --chain 5042 --verifier blockscout --verifier-url https://explorer.arc.io/api/`.
+The script hard-codes 48h / 1h on chain 5042 and refuses overrides. Easiest path: `./scripts/fund-mainnet.sh` then `./scripts/deploy-mainnet.sh` (both confirm before sending). Verification uses
+**Sourcify** (`--verifier sourcify`) because `explorer.arc.io/api` is behind a Cloudflare challenge; Blockscout then shows the contract as verified.
+
+**Deployed 2026-10-13:** `0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9` (block 25,732,389), Sourcify exact match.
 
 **Check it:**
 ```bash

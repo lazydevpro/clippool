@@ -36,7 +36,10 @@ Plan: [docs/plans/2026-10-12-clippool-plan.md](docs/plans/2026-10-12-clippool-pl
 - [x] Vercel production https://clippool.vercel.app (testnet config) · GitHub Actions cron → /api/cron/* HTTP 200
 - [ ] Google OAuth: add https://clippool.vercel.app origin + /auth/callback redirect (user)
 - [ ] Reliable scheduler: GitHub `schedule` hasn't fired on the new repo (manual dispatch works) → add Cloudflare Worker cron or cron-job.org hitting /api/cron/* as primary/backup #backend
-- [ ] Mainnet: follow docs/runbooks/mainnet.md (user runs fund-moving steps)
+- [x] Mainnet prep: operator keys in .env.mainnet, Neon `mainnet` branch (empty, migrated), deploy dry-run OK (48h/1h, ≈0.13 USDC gas), scripts/deploy-mainnet.sh + scripts/switch-vercel-mainnet.sh #launch
+- [x] Mainnet: operators funded; ClipPool deployed 0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9 (48h/1h, guardian = user wallet), Sourcify exact_match, explorer verified #launch
+- [ ] Mainnet: Circle LIVE keys in .env.mainnet → user runs scripts/switch-vercel-mainnet.sh #launch
+- [ ] Mainnet pilot campaign (user) #launch (user runs fund-moving steps)
 
 ## Later
 - [ ] Phase 6: mainnet deploy + verify + pilot campaign #launch

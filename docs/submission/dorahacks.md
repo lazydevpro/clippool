@@ -5,7 +5,7 @@ Fill every `⟨…⟩` before submitting. Requirements recap: live deployment on
 public repo, short description of what it does + what it uses Arc for, public builder profile.
 
 ## Pre-submit checklist
-- [ ] ClipPool deployed **and verified** on Arc mainnet → ⟨mainnet address⟩
+- [x] ClipPool deployed **and verified** on Arc mainnet → 0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9
 - [ ] App live at a public URL pointing at mainnet → https://clippool.vercel.app (live on testnet now; switch via docs/runbooks/mainnet.md §6)
 - [x] Public GitHub repo → https://github.com/lazydevpro/clippool
 - [x] Demo video (2:30) → https://youtu.be/6AJOfA3wmtU
@@ -25,7 +25,7 @@ Arc · USDC · EURC · Creator economy · Payouts · Payments
 
 ## Links
 - **Live app (Arc mainnet):** ⟨https://…⟩
-- **ClipPool contract (Arc mainnet, verified):** ⟨https://explorer.arc.io/address/…⟩
+- **ClipPool contract (Arc mainnet, verified):** https://explorer.arc.io/address/0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9
 - **Repo:** https://github.com/lazydevpro/clippool
 - **Demo video:** https://youtu.be/6AJOfA3wmtU
 - **Testnet deployment (verified):** https://explorer.testnet.arc.io/address/0x50519affe82591afd402c7f22ad9bc6dd2d86030
