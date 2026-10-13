@@ -10,7 +10,8 @@
     "test": "vitest run",
     "fund:testnet": "tsx scripts/fund-testnet.ts",
     "e2e:testnet": "tsx scripts/e2e-testnet.ts",
-    "campaign:testnet": "tsx scripts/create-campaign.ts"
+    "campaign:testnet": "tsx scripts/create-campaign.ts",
+    "campaign:mainnet": "tsx scripts/create-campaign-mainnet.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
