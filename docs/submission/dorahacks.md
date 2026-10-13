@@ -6,7 +6,7 @@ public repo, short description of what it does + what it uses Arc for, public bu
 
 ## Pre-submit checklist
 - [x] ClipPool deployed **and verified** on Arc mainnet → 0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9
-- [ ] App live at a public URL pointing at mainnet → https://clippool.vercel.app (live on testnet now; switch via docs/runbooks/mainnet.md §6)
+- [ ] App live at a public URL pointing at mainnet → https://clippool.fun (live on testnet now; switch via docs/runbooks/mainnet.md §6)
 - [x] Public GitHub repo → https://github.com/lazydevpro/clippool
 - [x] Demo video (2:30) → https://youtu.be/6AJOfA3wmtU
 - [ ] One real mainnet pilot campaign (small pool) with at least one payout → ⟨campaign URL + payout tx⟩

@@ -33,8 +33,8 @@ Plan: [docs/plans/2026-10-12-clippool-plan.md](docs/plans/2026-10-12-clippool-pl
 
 ## Launch
 - [x] Public repo https://github.com/lazydevpro/clippool · CI green
-- [x] Vercel production https://clippool.vercel.app (testnet config) · GitHub Actions cron → /api/cron/* HTTP 200
-- [ ] Google OAuth: add https://clippool.vercel.app origin + /auth/callback redirect (user)
+- [x] Vercel production https://clippool.fun (testnet config) · GitHub Actions cron → /api/cron/* HTTP 200
+- [ ] Google OAuth: add https://clippool.fun origin + /auth/callback redirect (user)
 - [ ] Reliable scheduler: GitHub `schedule` hasn't fired on the new repo (manual dispatch works) → add Cloudflare Worker cron or cron-job.org hitting /api/cron/* as primary/backup #backend
 - [x] Mainnet prep: operator keys in .env.mainnet, Neon `mainnet` branch (empty, migrated), deploy dry-run OK (48h/1h, ≈0.13 USDC gas), scripts/deploy-mainnet.sh + scripts/switch-vercel-mainnet.sh #launch
 - [x] Mainnet: operators funded; ClipPool deployed 0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9 (48h/1h, guardian = user wallet), Sourcify exact_match, explorer verified #launch
@@ -45,7 +45,7 @@ Plan: [docs/plans/2026-10-12-clippool-plan.md](docs/plans/2026-10-12-clippool-pl
 - [ ] Phase 6: mainnet deploy + verify + pilot campaign #launch
 - [x] Phase 7a: README + demo video (https://youtu.be/6AJOfA3wmtU) + YouTube thumbnail #launch
 - [ ] Phase 7b: DoraHacks submission after mainnet deploy (user submits) #launch
-- [ ] MetaMask/Blockaid flags clippool.vercel.app as malicious on permit → report false positive + consider custom domain before mainnet #launch
+- [ ] MetaMask/Blockaid flags clippool.fun as malicious on permit → report false positive + consider custom domain before mainnet #launch
 - [ ] v2: zkTLS engaged views, TikTok/IG, per-video windows #v2
 
 ## Done

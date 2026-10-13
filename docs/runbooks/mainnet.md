@@ -1,7 +1,7 @@
 # Mainnet runbook — ClipPool on Arc (chain 5042)
 
 You run every step that spends real USDC. Commands are copy-paste from the repo root unless noted.
-Current production (https://clippool.vercel.app) points at **testnet**; this runbook moves it to mainnet.
+Current production (https://clippool.fun) points at **testnet**; this runbook moves it to mainnet.
 
 Timeline for the pilot: deploy (~10 min) → campaign window (e.g. 24h) → 1h measurement → **48h dispute window** →
 payout. The grant needs a *live mainnet deployment + link*; the first payout lands ~3 days after the campaign starts.
@@ -67,8 +67,8 @@ cd apps/web && DATABASE_URL_UNPOOLED="$(npx neon@latest connection-string mainne
 ## 5. Circle + Google for production
 - Circle Console → switch to the **live/mainnet** environment → create a `LIVE_API_KEY:…` key → Wallets → User
   Controlled → Configurator → Social Logins → Google → same Web Client ID → copy the **live App ID**.
-- Google Cloud → OAuth client → Authorized JavaScript origins: `https://clippool.vercel.app`; Authorized redirect URIs:
-  `https://clippool.vercel.app/auth/callback`. Keep test users added until Google verifies `youtube.readonly`.
+- Google Cloud → OAuth client → Authorized JavaScript origins: `https://clippool.fun`; Authorized redirect URIs:
+  `https://clippool.fun/auth/callback`. Keep test users added until Google verifies `youtube.readonly`.
 
 ## 6. Switch production to mainnet (Vercel)
 Each command prompts for the value (paste it; nothing is echoed to history):
@@ -83,13 +83,13 @@ Values: `NEXT_PUBLIC_CHAIN=arc`, `NEXT_PUBLIC_ARC_RPC_URL=https://rpc.mainnet.ar
 `deployments/5042.json`, live Circle App ID / API key, mainnet oracle/keeper keys, mainnet Neon pooled URL.
 Mark the keys and API key as sensitive when prompted.
 
-**Check it:** https://clippool.vercel.app shows "Arc" (not "Arc Testnet"); `/campaigns/new` shows 1h / 24h / 7d delays
+**Check it:** https://clippool.fun shows "Arc" (not "Arc Testnet"); `/campaigns/new` shows 1h / 24h / 7d delays
 and "dispute window 48 hours"; GitHub → Actions → cron → *Run workflow* → `sync` returns HTTP 200.
 
 ## 7. Pilot campaign
-1. Open https://clippool.vercel.app/campaigns/new with your wallet on **Arc mainnet** (MetaMask/Rabby).
+1. Open https://clippool.fun/campaigns/new with your wallet on **Arc mainnet** (MetaMask/Rabby).
 2. Example: 10 USDC pool, 24h window, 1h measurement delay, 20% cap, min views 100, clear rules.
-3. Sign the permit + create (one transaction). Share `https://clippool.vercel.app/c/<id>` with creators.
+3. Sign the permit + create (one transaction). Share `https://clippool.fun/c/<id>` with creators.
 4. Everything after is automatic (GitHub Actions cron → oracle snapshot → 48h dispute → keeper payout).
    Watch `/c/<id>/receipts`; verify the split with the CLI command shown there.
 

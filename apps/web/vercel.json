@@ -1,3 +1,7 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/(.*)", "has": [{ "type": "host", "value": "www.clippool.fun" }], "destination": "https://clippool.fun/$1", "permanent": true },
+    { "source": "/(.*)", "has": [{ "type": "host", "value": "clippool.vercel.app" }], "destination": "https://clippool.fun/$1", "permanent": true }
+  ]
 }

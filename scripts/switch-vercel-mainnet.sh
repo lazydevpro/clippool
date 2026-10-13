@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Point production (clippool.vercel.app) at Arc MAINNET. YOU run this — it uploads mainnet secrets to Vercel.
+# Point production (https://clippool.fun) at Arc MAINNET. YOU run this — it uploads mainnet secrets to Vercel.
 # Reads .env.mainnet (keys, DB, Circle LIVE) + contracts/deployments/5042.json. Asks for confirmation.
 # --without-circle : switch without Circle LIVE keys (Google wallet sign-in hidden; paste-a-wallet + Connect YouTube still work)
 set -euo pipefail
@@ -20,6 +20,7 @@ const missing = need.filter((k) => !(env[k] || "").trim());
 if (missing.length) { console.error("Missing in .env.mainnet: " + missing.join(", ")); process.exit(1); }
 const out = {
   NEXT_PUBLIC_CHAIN: "arc",
+  NEXT_PUBLIC_APP_URL: "https://clippool.fun",
   NEXT_PUBLIC_ARC_RPC_URL: "https://rpc.mainnet.arc.io",
   NEXT_PUBLIC_CLIPPOOL_ADDRESS: d.address,
   NEXT_PUBLIC_CLIPPOOL_DEPLOY_BLOCK: String(d.deployBlock),
@@ -51,4 +52,4 @@ if [ "$WITHOUT_CIRCLE" = "1" ]; then
   # testnet Circle keys can't create mainnet wallets → remove them so the Google option is hidden
   for k in NEXT_PUBLIC_CIRCLE_APP_ID CIRCLE_API_KEY; do npx --yes vercel@latest env rm "$k" production --yes >/dev/null 2>&1 && echo "✓ removed $k (Circle sign-in hidden)" || echo "• $k not set"; done
 fi
-npx --yes vercel@latest deploy --prod --yes >/dev/null && echo "✓ Production redeployed on mainnet → https://clippool.vercel.app"
+npx --yes vercel@latest deploy --prod --yes >/dev/null && echo "✓ Production redeployed on mainnet → https://clippool.fun"

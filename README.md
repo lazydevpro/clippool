@@ -9,7 +9,7 @@ split **by views** — with a per-creator cap — and paid to every creator's wa
 
 ▶️ **[Watch the 2½-minute demo](https://youtu.be/6AJOfA3wmtU)** — a brand funds a campaign, a creator submits a real Short, and the pool is paid out onchain.
 
-> Status: live at **https://clippool.vercel.app** (Arc testnet) · working end-to-end · mainnet pilot next ([runbook](docs/runbooks/mainnet.md)). Built for [Arc Microgrants](https://dorahacks.io/hackathon/arc-microgrants/detail).
+> Status: live at **https://clippool.fun** (Arc testnet) · working end-to-end · mainnet pilot next ([runbook](docs/runbooks/mainnet.md)). Built for [Arc Microgrants](https://dorahacks.io/hackathon/arc-microgrants/detail).
 
 ---
 
