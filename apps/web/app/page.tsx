@@ -3,14 +3,17 @@ import Link from "next/link";
 import {
   ArrowRightIcon,
   BadgeCheckIcon,
+  CheckCircle2Icon,
   CoinsIcon,
   FileCheck2Icon,
   GaugeIcon,
   LinkIcon,
   LockIcon,
+  MessageSquareIcon,
   ScaleIcon,
   ShieldCheckIcon,
   SparklesIcon,
+  ThumbsUpIcon,
   UploadIcon,
   WalletIcon,
   ZapIcon,
@@ -22,15 +25,15 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: { absolute: "ClipPool: get paid for every view, fairly" },
   description:
-    "Pro-rata creator campaigns on Arc. Brands lock a USDC pool, creators post YouTube Shorts, and the pool is split by views and paid instantly onchain.",
+    "Pro-rata creator campaigns on Arc. Brands lock a USDC pool, choose a scoring metric (views, likes, or comments), and the pool is split fairly and paid instantly onchain.",
 };
 
 const SPLIT = [
-  { name: "Priya Shorts", views: "412K", pct: 20, amount: "1,000.00", capped: true },
-  { name: "OnchainOli", views: "269K", pct: 18.4, amount: "920.40" },
-  { name: "LatAm Ledger", views: "197K", pct: 13.5, amount: "674.95" },
-  { name: "Manila Minutes", views: "155K", pct: 10.6, amount: "530.03" },
-  { name: "+ 8 more creators", views: "438K", pct: 37.5, amount: "1,874.62", muted: true },
+  { name: "Priya Shorts", score: "16.5K likes", pct: 20, amount: "1,000.00", capped: true },
+  { name: "OnchainOli", score: "10.8K likes", pct: 18.4, amount: "920.40" },
+  { name: "LatAm Ledger", score: "7.9K likes", pct: 13.5, amount: "674.95" },
+  { name: "Manila Minutes", score: "6.2K likes", pct: 10.6, amount: "530.03" },
+  { name: "+ 8 more creators", score: "17.5K likes", pct: 37.5, amount: "1,874.62", muted: true },
 ];
 
 function HeroVisual() {
@@ -48,7 +51,15 @@ function HeroVisual() {
             <p className="font-semibold num">5,000.00 USDC</p>
           </div>
         </div>
-        <ul className="mt-5 space-y-3.5" aria-label="Example allocation by views">
+        <div className="mt-3 flex items-center gap-2">
+          <span className="flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[0.7rem] font-medium text-primary dark:text-brand-soft">
+            <ThumbsUpIcon className="size-3" aria-hidden /> Scored by likes
+          </span>
+          <span className="flex items-center gap-1 rounded-full border border-success/30 bg-success/10 px-2.5 py-0.5 text-[0.7rem] font-medium text-success">
+            <CheckCircle2Icon className="size-3" aria-hidden /> Brand approval on
+          </span>
+        </div>
+        <ul className="mt-4 space-y-3.5" aria-label="Example allocation by likes">
           {SPLIT.map((r) => (
             <li key={r.name} className="space-y-1.5">
               <div className="flex items-center justify-between gap-3 text-sm">
@@ -69,7 +80,7 @@ function HeroVisual() {
                     style={{ width: `${(r.pct / 37.5) * 100 * 0.95}%` }}
                   />
                 </div>
-                <span className="w-16 text-right text-xs text-muted-foreground num">{r.views} views</span>
+                <span className="w-20 text-right text-xs text-muted-foreground num">{r.score}</span>
               </div>
             </li>
           ))}
@@ -87,13 +98,13 @@ function HeroVisual() {
 
 const BRAND_STEPS = [
   { icon: LockIcon, title: "Lock a pool", body: "Fund a USDC or EURC pool in one transaction with a permit signature. No approve step." },
-  { icon: FileCheck2Icon, title: "Set the rules", body: "Window, per-creator cap, minimum views. Rules are hashed onchain so they can't change later." },
-  { icon: GaugeIcon, title: "Pay only for traction", body: "The whole pool goes to creators by views. Cap overflow and dust are refunded to you." },
+  { icon: FileCheck2Icon, title: "Set the rules", body: "Choose your scoring metric (views, likes, or comments), set a per-creator cap and minimum threshold, and optionally enable submission approval. Rules are hashed onchain." },
+  { icon: GaugeIcon, title: "Pay only for traction", body: "The whole pool goes to creators pro-rata by your chosen metric. Cap overflow and dust are refunded to you." },
 ];
 const CREATOR_STEPS = [
   { icon: SparklesIcon, title: "Post a Short", body: "Add your personal cp- code to the description. It proves the video is yours." },
   { icon: UploadIcon, title: "Submit the link", body: "Paste the URL with your payout wallet. No gas, no signup fee, just an address." },
-  { icon: WalletIcon, title: "Get paid automatically", body: "After the snapshot and a 48h dispute window, USDC lands in your wallet. No claiming." },
+  { icon: WalletIcon, title: "Get paid automatically", body: "After the snapshot (and brand approval if required), USDC lands in your wallet via a 48h dispute window. No claiming." },
 ];
 
 const WHY_ARC = [
@@ -161,11 +172,12 @@ export default function Home() {
               Pro-rata creator campaigns on Arc · USDC &amp; EURC
             </p>
             <h1 className="mt-6 text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
-              Get paid for every view. <span className="text-gradient">Fairly.</span>
+              Get paid for every short. <span className="text-gradient">Fairly.</span>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-pretty text-muted-foreground">
-              Brands lock a stablecoin pool. Creators post YouTube Shorts. When the campaign ends, the pool is split by
-              views, with a per-creator cap, and paid out instantly onchain.
+              Brands lock a stablecoin pool, choose a scoring metric (views, likes, or comments), and optionally review
+              submissions before they count. When the campaign ends, the pool splits pro-rata and pays out instantly
+              onchain.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link href="/campaigns/new" className={buttonVariants({ size: "lg", className: "h-11 px-5 text-sm" })}>
@@ -179,7 +191,7 @@ export default function Home() {
               </Link>
             </div>
             <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
-              {["No gas for creators", "No signup fee", "Verifiable split"].map((t) => (
+              {["No gas for creators", "No signup fee", "Verifiable split", "Views, likes, or comments"].map((t) => (
                 <li key={t} className="flex items-center gap-1.5">
                   <BadgeCheckIcon className="size-4 text-success" aria-hidden /> {t}
                 </li>
@@ -197,15 +209,84 @@ export default function Home() {
         <div className="max-w-2xl">
           <p className="text-sm font-medium text-primary dark:text-brand-soft">How it works</p>
           <h2 id="how" className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-            One pool. Every view counts.
+            One pool. Every engagement counts.
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Your payout is the pool times your share of total views, capped so no single creator takes it all.
+            Your payout is the pool times your share of the chosen metric — views, likes, or comments — capped so no single creator takes it all.
           </p>
         </div>
         <div className="mt-10 grid gap-4 md:grid-cols-2">
           <StepList label="For brands" steps={BRAND_STEPS} accent="text-primary dark:text-brand-soft" />
           <StepList label="For creators" steps={CREATOR_STEPS} accent="text-success" />
+        </div>
+      </section>
+
+      {/* New features callout */}
+      <section className="border-y bg-muted/30" aria-labelledby="new-features">
+        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+          <p className="text-sm font-medium text-primary dark:text-brand-soft">What&apos;s new</p>
+          <h2 id="new-features" className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+            More control for brands. More clarity for creators.
+          </h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {/* Metric selector */}
+            <div className="rounded-2xl border bg-card p-6">
+              <div className="flex items-center gap-3">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-primary/15">
+                  <GaugeIcon className="size-5 text-primary dark:text-brand-soft" aria-hidden />
+                </span>
+                <h3 className="font-semibold">Choose your scoring metric</h3>
+              </div>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Brands now pick the engagement signal that matches their campaign goal. Awareness campaigns can score
+                by <strong className="font-medium text-foreground">views</strong>, conversation-focused campaigns by{" "}
+                <strong className="font-medium text-foreground">comments</strong>, and community drives by{" "}
+                <strong className="font-medium text-foreground">likes</strong>. The metric is locked onchain at
+                creation and can&apos;t change mid-campaign.
+              </p>
+              <div className="mt-4 flex gap-2">
+                {[
+                  { label: "Views", icon: GaugeIcon },
+                  { label: "Likes", icon: ThumbsUpIcon },
+                  { label: "Comments", icon: MessageSquareIcon },
+                ].map(({ label, icon: Icon }) => (
+                  <span
+                    key={label}
+                    className="flex items-center gap-1.5 rounded-full border bg-background px-3 py-1 text-xs font-medium"
+                  >
+                    <Icon className="size-3.5 text-primary dark:text-brand-soft" aria-hidden />
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </div>
+            {/* Brand approval */}
+            <div className="rounded-2xl border bg-card p-6">
+              <div className="flex items-center gap-3">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-success/15">
+                  <CheckCircle2Icon className="size-5 text-success" aria-hidden />
+                </span>
+                <h3 className="font-semibold">Brand approval workflow</h3>
+              </div>
+              <p className="mt-3 text-sm text-muted-foreground">
+                When enabled, submitted Shorts enter a{" "}
+                <strong className="font-medium text-foreground">pending review</strong> queue. The brand can approve
+                or reject each one before it counts toward the snapshot. Rejected shares are redistributed — not
+                refunded — so the full pool always pays out to eligible creators.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {[
+                  { label: "Pending review", color: "bg-warning/10 text-warning border-warning/20" },
+                  { label: "Approved", color: "bg-success/10 text-success border-success/20" },
+                  { label: "Rejected", color: "bg-destructive/10 text-destructive border-destructive/20" },
+                ].map(({ label, color }) => (
+                  <span key={label} className={cn("rounded-full border px-3 py-1 text-xs font-medium", color)}>
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -265,7 +346,10 @@ export default function Home() {
               <p className="text-muted-foreground">your payout =</p>
               <p className="mt-1">
                 min(<span className="text-primary dark:text-brand-soft">pool</span> ×{" "}
-                <span className="text-success">your views</span> / all views, cap)
+                <span className="text-success">your score</span> / total score, cap)
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground not-italic font-sans">
+                score = views <span className="mx-1 opacity-40">|</span> likes <span className="mx-1 opacity-40">|</span> comments — brand's choice
               </p>
             </div>
           </div>

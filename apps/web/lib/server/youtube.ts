@@ -62,6 +62,13 @@ export interface YtVideo {
   privacyStatus: string; // "public" | "unlisted" | "private"
   uploadStatus: string; // "processed" | "uploaded" | "deleted" | "failed" | "rejected"
   viewCount: number;
+  /** Like count from the YouTube Data API. null when the creator has hidden likes. */
+  likeCount: number | null;
+  /**
+   * Comment count from the YouTube Data API. null when comments are disabled.
+   * Note: YouTube API v3 does not expose shareCount.
+   */
+  commentCount: number | null;
   thumbnailUrl: string | null;
 }
 
@@ -112,6 +119,7 @@ const toUnix = (iso: string | undefined) => (iso ? Math.floor(Date.parse(iso) / 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function mapVideo(item: any): YtVideo {
   const sn = item.snippet ?? {};
+  const stats = item.statistics ?? {};
   const thumbs = sn.thumbnails ?? {};
   return {
     id: item.id,
@@ -123,7 +131,11 @@ export function mapVideo(item: any): YtVideo {
     durationSec: parseIsoDuration(item.contentDetails?.duration),
     privacyStatus: item.status?.privacyStatus ?? "unknown",
     uploadStatus: item.status?.uploadStatus ?? "unknown",
-    viewCount: Number(item.statistics?.viewCount ?? 0),
+    viewCount: Number(stats.viewCount ?? 0),
+    // likeCount is absent (undefined) when the creator hides likes — treat as null.
+    likeCount: stats.likeCount !== undefined ? Number(stats.likeCount) : null,
+    // commentCount is absent when comments are disabled.
+    commentCount: stats.commentCount !== undefined ? Number(stats.commentCount) : null,
     thumbnailUrl: pickThumbnail(thumbs),
   };
 }
@@ -203,6 +215,19 @@ export function countableViews(video: YtVideo | undefined): number {
   if (!video) return 0;
   if (video.privacyStatus !== "public") return 0;
   if (["deleted", "failed", "rejected"].includes(video.uploadStatus)) return 0;
+  return Number.isFinite(video.viewCount) && video.viewCount > 0 ? Math.floor(video.viewCount) : 0;
+}
+
+/**
+ * Count for the given engagement metric at snapshot time.
+ * Falls back to 0 when the metric is hidden or the video is ineligible.
+ */
+export function countableMetric(video: YtVideo | undefined, metric: "views" | "likes" | "comments"): number {
+  if (!video) return 0;
+  if (video.privacyStatus !== "public") return 0;
+  if (["deleted", "failed", "rejected"].includes(video.uploadStatus)) return 0;
+  if (metric === "likes") return video.likeCount !== null && video.likeCount > 0 ? Math.floor(video.likeCount) : 0;
+  if (metric === "comments") return video.commentCount !== null && video.commentCount > 0 ? Math.floor(video.commentCount) : 0;
   return Number.isFinite(video.viewCount) && video.viewCount > 0 ? Math.floor(video.viewCount) : 0;
 }
 

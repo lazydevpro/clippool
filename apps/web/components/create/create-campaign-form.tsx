@@ -53,6 +53,16 @@ const safePool = (v: string) => {
 /** The contract only needs start < end; testnet allows short campaigns for quick end-to-end runs. */
 const MIN_CAMPAIGN_MS = IS_TESTNET ? 5 * 60_000 : 60 * 60_000;
 
+const METRICS = [
+  { value: "views", label: "Views", hint: "Total view count" },
+  { value: "likes", label: "Likes", hint: "Like count (hidden likes = 0)" },
+  { value: "comments", label: "Comments", hint: "Comment count" },
+] as const;
+
+type MetricValue = (typeof METRICS)[number]["value"];
+
+const METRIC_TO_UINT8: Record<MetricValue, number> = { views: 0, likes: 1, comments: 2 };
+
 const schema = z
   .object({
     title: z.string().trim().min(4, "Use at least 4 characters.").max(80, "Keep it under 80 characters."),
@@ -80,6 +90,8 @@ const schema = z
       .trim()
       .regex(/^\d+$/, "Enter a whole number.")
       .refine((v) => Number(v) <= 4_294_967_295, "That's too large."),
+    metric: z.enum(["views", "likes", "comments"]),
+    requiresApproval: z.boolean(),
   })
   .superRefine((v, ctx) => {
     const s = new Date(v.start).getTime();
@@ -117,6 +129,8 @@ function defaultValues(): FormValues {
     delay: "604800",
     capPct: "20",
     minViews: "1000",
+    metric: "views" as MetricValue,
+    requiresApproval: false,
   };
 }
 const toUnix = (local: string) => Math.floor(new Date(local).getTime() / 1000);
@@ -377,6 +391,8 @@ function CreateForm() {
           maxShareBps: Math.round(Number(values.capPct) * 100),
           minViews: Number(values.minViews),
           rules: m.rules,
+          metric: METRIC_TO_UINT8[values.metric as MetricValue] ?? 0,
+          requiresApproval: values.requiresApproval ?? false,
         },
         {
           onStep: (step) => setFlow((f) => (f ? { ...f, step } : f)),
@@ -608,9 +624,9 @@ function CreateForm() {
             </Field>
             <Field
               id={id("minViews")}
-              label="Minimum views per Short"
+              label={`Minimum ${v.metric ?? "views"} per Short`}
               error={errors.minViews?.message}
-              hint="Shorts below this at the snapshot don't count."
+              hint={`Shorts below this at the snapshot don't count.`}
             >
               <Input
                 id={id("minViews")}
@@ -621,6 +637,71 @@ function CreateForm() {
                 {...register("minViews")}
               />
             </Field>
+          </div>
+
+          {/* Engagement metric selector */}
+          <div className="space-y-2">
+            <p id={id("metric")} className="text-sm font-medium">
+              Scoring metric
+            </p>
+            <p className="text-xs text-muted-foreground">
+              The pro-rata split is computed proportionally to this metric.{" "}
+              <span className="text-muted-foreground/70">YouTube doesn&apos;t expose share counts, so shares aren&apos;t available.</span>
+            </p>
+            <Controller
+              control={control}
+              name="metric"
+              render={({ field }) => (
+                <div role="radiogroup" aria-labelledby={id("metric")} className="grid grid-cols-3 gap-2">
+                  {METRICS.map((m) => {
+                    const checked = field.value === m.value;
+                    return (
+                      <button
+                        key={m.value}
+                        type="button"
+                        role="radio"
+                        aria-checked={checked}
+                        onClick={() => field.onChange(m.value)}
+                        className={cn(
+                          "rounded-xl border px-3 py-2.5 text-left transition-colors focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
+                          checked ? "border-primary bg-primary/12" : "hover:bg-muted",
+                        )}
+                      >
+                        <span className="block text-sm font-medium">{m.label}</span>
+                        <span className="block text-xs text-muted-foreground">{m.hint}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            />
+          </div>
+
+          {/* Brand approval toggle */}
+          <div className="flex items-start gap-3 rounded-xl border p-4">
+            <Controller
+              control={control}
+              name="requiresApproval"
+              render={({ field }) => (
+                <input
+                  id={id("requiresApproval")}
+                  type="checkbox"
+                  checked={field.value}
+                  onChange={(e) => field.onChange(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 shrink-0 rounded border border-input accent-primary cursor-pointer"
+                  aria-describedby={`${id("requiresApproval")}-hint`}
+                />
+              )}
+            />
+            <div className="flex-1 min-w-0">
+              <label htmlFor={id("requiresApproval")} className="cursor-pointer text-sm font-medium">
+                Require brand approval
+              </label>
+              <p id={`${id("requiresApproval")}-hint`} className="mt-0.5 text-xs text-muted-foreground">
+                Submitted Shorts land in a review queue. Only approved Shorts count toward the split. Rejected Shorts are excluded
+                and their share goes to other creators.
+              </p>
+            </div>
           </div>
         </fieldset>
       </div>
@@ -652,7 +733,9 @@ function CreateForm() {
             <SummaryRow label="Cap per creator">
               {v.capPct || "—"}%{pool > 0n && <span className="block text-xs font-normal text-muted-foreground">{formatToken(capAmount, symbol)}</span>}
             </SummaryRow>
-            <SummaryRow label="Min views">{formatInt(Number(v.minViews || 0))}</SummaryRow>
+            <SummaryRow label={`Min ${v.metric ?? "views"}`}>{formatInt(Number(v.minViews || 0))}</SummaryRow>
+            <SummaryRow label="Scoring metric">{METRICS.find((m) => m.value === v.metric)?.label ?? "Views"}</SummaryRow>
+            <SummaryRow label="Brand approval">{v.requiresApproval ? "Required" : "Not required"}</SummaryRow>
             <SummaryRow label="Rules hash">
               <span className="font-mono text-xs">{(v.rules ?? "").trim() ? shortHash(rulesHashOf((v.rules ?? "").trim())) : "—"}</span>
             </SummaryRow>

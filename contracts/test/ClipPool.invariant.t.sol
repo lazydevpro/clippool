@@ -58,7 +58,9 @@ contract ClipPoolHandler is Test {
             measurementDelay: delay,
             maxShareBps: 10_000,
             minViews: 0,
-            rulesHash: bytes32(0)
+            rulesHash: bytes32(0),
+            metric: ClipPool.Metric.Views,
+            requiresApproval: false
         });
         vm.prank(brands[brandSeed % 3]);
         ids.push(cp.createCampaign(p));

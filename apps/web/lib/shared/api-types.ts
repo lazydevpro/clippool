@@ -11,6 +11,18 @@ export type CampaignStatus =
   | "completed"  // all allocations paid (or swept)
   | "refunded";  // no root in time → brand refunded
 
+/**
+ * Engagement metric used to score submissions for pro-rata allocation.
+ * YouTube API v3 does not expose shareCount, so shares are not supported.
+ */
+export type EngagementMetric = "views" | "likes" | "comments";
+
+export const ENGAGEMENT_METRIC_LABELS: Record<EngagementMetric, string> = {
+  views: "Views",
+  likes: "Likes",
+  comments: "Comments",
+};
+
 export interface CampaignSummary {
   id: string;
   brand: `0x${string}`;
@@ -28,6 +40,12 @@ export interface CampaignSummary {
   creatorsCount: number;
   /** The contract's DISPUTE_WINDOW() in seconds (deploy-time immutable: mainnet 172800, testnet 600). */
   disputeWindow: number;
+  /** Engagement metric used to score submissions (default: "views"). */
+  metric: EngagementMetric;
+  /** When true, submitted Shorts must be approved by the brand before they count. */
+  requiresApproval: boolean;
+  /** Number of submissions awaiting brand approval (only non-zero when requiresApproval=true). */
+  pendingApprovalCount?: number;
 }
 
 export interface CampaignDetail extends CampaignSummary {
@@ -66,7 +84,8 @@ export type SubmissionRejectReason =
   | "missing_binding_code" | "duplicate" | "channel_locked_to_other_wallet"
   | "campaign_not_live" | "channel_too_new";
 export interface SubmissionResponse {
-  status: "accepted" | "rejected";
+  /** "accepted" = counts immediately; "pending_approval" = waiting for brand review. */
+  status: "accepted" | "rejected" | "pending_approval";
   reason?: SubmissionRejectReason;
   message?: string;
   submission?: {
@@ -79,6 +98,40 @@ export interface SubmissionResponse {
     proof?: "oauth" | "code";
   };
 }
+
+// ── Brand submission review ──
+
+export interface SubmissionForReview {
+  id: number;
+  videoId: string;
+  channelId: string;
+  channelTitle: string;
+  title: string;
+  thumbnailUrl: string | null;
+  wallet: `0x${string}`;
+  publishedAt: number;
+  views: number | null;
+  likes: number | null;
+  comments: number | null;
+  proof?: "oauth" | "code";
+  brandReview: "approved" | "rejected" | null;
+  brandReviewNote: string | null;
+}
+
+/** GET /api/campaigns/:id/submissions — brand fetches all submissions for review.
+ *  Requires x-brand-wallet header matching the campaign brand address. */
+export interface CampaignSubmissionsResponse {
+  submissions: SubmissionForReview[];
+}
+
+/** POST /api/campaigns/:id/submissions/:subId/review — brand approves or rejects a submission.
+ *  Body: { decision: "approved" | "rejected"; note?: string }
+ *  Auth: x-brand-wallet header matching campaign brand address (or wallet signature in future). */
+export interface ReviewSubmissionRequest {
+  decision: "approved" | "rejected";
+  note?: string;
+}
+export interface ReviewSubmissionResponse { ok: true; decision: "approved" | "rejected" }
 
 /** GET /api/campaigns/:id/receipts */
 export interface ReceiptsResponse {

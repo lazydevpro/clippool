@@ -23,6 +23,11 @@ contract ClipPool is Ownable2Step, ReentrancyGuard {
 
     // ─────────────────────────────────────────── Types ───────────────────────────────────────────
 
+    /// @notice Metric used to score submissions for pro-rata allocation.
+    /// 0 = views (default), 1 = likes, 2 = comments.
+    /// Shares are not supported (YouTube API v3 does not expose shareCount).
+    enum Metric { Views, Likes, Comments }
+
     struct CampaignParams {
         address token;
         uint128 pool;
@@ -32,6 +37,11 @@ contract ClipPool is Ownable2Step, ReentrancyGuard {
         uint16 maxShareBps;
         uint32 minViews;
         bytes32 rulesHash;
+        /// @notice Scoring metric for the allocation algorithm (Views/Likes/Comments).
+        Metric metric;
+        /// @notice When true, submitted Shorts must be approved by the brand before
+        ///         they are included in the snapshot. Protects against fraudulent submissions.
+        bool requiresApproval;
     }
 
     struct Claim {
@@ -57,6 +67,11 @@ contract ClipPool is Ownable2Step, ReentrancyGuard {
         bytes32 snapshotHash;
         bool remainderRefunded;
         bool unclaimedSwept;
+        /// @notice Scoring metric used to compute the pro-rata allocation.
+        Metric metric;
+        /// @notice When true, the brand must approve each submission before it is
+        ///         counted in the snapshot. Managed offchain; recorded here for transparency.
+        bool requiresApproval;
     }
 
     // ───────────────────────────────────── Constants / immutables ────────────────────────────────
@@ -105,7 +120,9 @@ contract ClipPool is Ownable2Step, ReentrancyGuard {
         uint64 snapshotTime,
         uint16 maxShareBps,
         uint32 minViews,
-        bytes32 rulesHash
+        bytes32 rulesHash,
+        Metric metric,
+        bool requiresApproval
     );
     event RootPosted(
         uint256 indexed id, bytes32 root, uint128 totalAllocated, bytes32 snapshotHash, uint64 disputeEndsAt
@@ -429,6 +446,8 @@ contract ClipPool is Ownable2Step, ReentrancyGuard {
         c.maxShareBps = p.maxShareBps;
         c.minViews = p.minViews;
         c.rulesHash = p.rulesHash;
+        c.metric = p.metric;
+        c.requiresApproval = p.requiresApproval;
 
         IERC20(p.token).safeTransferFrom(msg.sender, address(this), p.pool);
         emit CampaignCreated(
@@ -441,7 +460,9 @@ contract ClipPool is Ownable2Step, ReentrancyGuard {
             snapshotTime,
             p.maxShareBps,
             p.minViews,
-            p.rulesHash
+            p.rulesHash,
+            p.metric,
+            p.requiresApproval
         );
     }
 

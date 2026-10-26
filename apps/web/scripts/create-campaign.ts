@@ -53,6 +53,8 @@ async function main() {
     maxShareBps,
     minViews,
     rulesHash: keccak256(toBytes(rules)),
+    metric: 0, // Metric.Views
+    requiresApproval: false,
   };
   const deadline = now + 3600n;
   const sig = await brand.signTypedData({

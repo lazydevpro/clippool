@@ -7,6 +7,7 @@ import type { CampaignMetaRow, CampaignRow } from "@/lib/db/schema";
 import type {
   CampaignDetail,
   CampaignSummary,
+  EngagementMetric,
   LeaderboardEntry,
   LeaderboardResponse,
   ReceiptsResponse,
@@ -40,10 +41,15 @@ export function statusOf(c: CampaignRow, now: number, disputeWindow: number) {
   );
 }
 
+function safeMetric(m: string | null | undefined): EngagementMetric {
+  if (m === "likes" || m === "comments") return m;
+  return "views";
+}
+
 export function toSummary(
   c: CampaignRow,
   meta: Pick<CampaignMetaRow, "title" | "verified"> | null,
-  counts: { submissions: number; creators: number },
+  counts: { submissions: number; creators: number; pendingApproval?: number },
   chainKey: ChainKey,
   now: number,
   disputeWindow: number,
@@ -64,13 +70,16 @@ export function toSummary(
     submissionsCount: counts.submissions,
     creatorsCount: counts.creators,
     disputeWindow,
+    metric: safeMetric(c.metric),
+    requiresApproval: c.requiresApproval ?? false,
+    pendingApprovalCount: counts.pendingApproval,
   };
 }
 
 export function toDetail(
   c: CampaignRow,
   meta: Pick<CampaignMetaRow, "title" | "rules" | "verified"> | null,
-  counts: { submissions: number; creators: number },
+  counts: { submissions: number; creators: number; pendingApproval?: number },
   chainKey: ChainKey,
   now: number,
   disputeWindow: number,
@@ -90,6 +99,7 @@ export function toDetail(
 const countsSql = {
   submissions: sql<number>`(select count(*)::int from ${submissions} s where s.campaign_id = ${campaigns.id} and s.status = 'accepted')`,
   creators: sql<number>`(select count(distinct lower(s.wallet))::int from ${submissions} s where s.campaign_id = ${campaigns.id} and s.status = 'accepted')`,
+  pendingApproval: sql<number>`(select count(*)::int from ${submissions} s where s.campaign_id = ${campaigns.id} and s.status = 'pending_approval')`,
 };
 
 export async function listCampaigns(db: Db, chainKey: ChainKey, now: number, disputeWindow: number): Promise<CampaignSummary[]> {
@@ -100,7 +110,7 @@ export async function listCampaigns(db: Db, chainKey: ChainKey, now: number, dis
     .orderBy(desc(campaigns.id))
     .limit(200);
   return rows.map((r) =>
-    toSummary(r.c, r.title !== null ? { title: r.title, verified: !!r.verified } : null, { submissions: Number(r.submissions), creators: Number(r.creators) }, chainKey, now, disputeWindow),
+    toSummary(r.c, r.title !== null ? { title: r.title, verified: !!r.verified } : null, { submissions: Number(r.submissions), creators: Number(r.creators), pendingApproval: Number(r.pendingApproval ?? 0) }, chainKey, now, disputeWindow),
   );
 }
 
@@ -117,7 +127,7 @@ export async function getCampaignDetail(
     .leftJoin(campaignMeta, eq(campaignMeta.campaignId, campaigns.id))
     .where(eq(campaigns.id, id));
   if (!r) return null;
-  return toDetail(r.c, r.meta, { submissions: Number(r.submissions), creators: Number(r.creators) }, chainKey, now, disputeWindow);
+  return toDetail(r.c, r.meta, { submissions: Number(r.submissions), creators: Number(r.creators), pendingApproval: Number(r.pendingApproval ?? 0) }, chainKey, now, disputeWindow);
 }
 
 export async function getCampaignRow(db: Db, id: number): Promise<CampaignRow | null> {

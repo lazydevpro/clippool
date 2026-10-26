@@ -52,6 +52,17 @@ export const campaigns = pgTable("campaigns", {
   oracleNote: text("oracle_note"),
   rootTx: text("root_tx"),
   createTx: text("create_tx"),
+  /**
+   * Engagement metric used to score submissions for pro-rata allocation.
+   * "views" (default) | "likes" | "comments"
+   * YouTube API v3 does not expose shareCount, so shares are not supported.
+   */
+  metric: text("metric").notNull().default("views"),
+  /**
+   * When true, submitted Shorts land in "pending_approval" status and must be
+   * explicitly approved by the brand before the oracle counts them.
+   */
+  requiresApproval: boolean("requires_approval").notNull().default(false),
   createdBlock: bigint("created_block", { mode: "number" }),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
@@ -82,11 +93,24 @@ export const submissions = pgTable(
     wallet: text("wallet").notNull(),
     publishedAt: timestamp("published_at", { withTimezone: true }).notNull(),
     durationSec: integer("duration_sec").notNull(),
-    /** "accepted" | "rejected" (operators set "rejected" + reason to exclude fraud before a repost). */
+    /**
+     * Overall record status: "accepted" | "rejected" | "pending_approval".
+     * "pending_approval" = campaign has requiresApproval=true; brand has not yet reviewed.
+     * "rejected" = brand or oracle marked the Short as ineligible.
+     * "accepted" = counts toward the snapshot.
+     */
     status: text("status").notNull().default("accepted"),
     /** How the submitter proved control of the video: "oauth" (channel_owners) | "code" (binding code). */
     proof: text("proof").$type<SubmissionProof>().notNull().default("code"),
     rejectReason: text("reject_reason"),
+    /**
+     * Brand's review decision for campaigns with requiresApproval=true.
+     * null = not yet reviewed, "approved" = counts, "rejected" = excluded.
+     * When null and requiresApproval=true, status is "pending_approval".
+     */
+    brandReview: text("brand_review").$type<"approved" | "rejected" | null>().default(null),
+    brandReviewNote: text("brand_review_note"),
+    brandReviewedAt: timestamp("brand_reviewed_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [

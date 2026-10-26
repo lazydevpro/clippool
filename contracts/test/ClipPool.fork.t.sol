@@ -57,7 +57,9 @@ contract ClipPoolArcForkTest is Test {
             measurementDelay: uint64(cp.MIN_MEASUREMENT_DELAY()),
             maxShareBps: 10_000,
             minViews: 0,
-            rulesHash: keccak256("fork rules")
+            rulesHash: keccak256("fork rules"),
+            metric: ClipPool.Metric.Views,
+            requiresApproval: false
         });
     }
 

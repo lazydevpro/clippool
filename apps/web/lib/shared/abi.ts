@@ -2,9 +2,10 @@ import { parseAbi } from "viem";
 
 // Mirrors docs/plans/interfaces.md §5. Regenerate from contracts/out once the contract lands.
 export const clipPoolAbi = parseAbi([
-  "struct CampaignParams { address token; uint128 pool; uint64 startTime; uint64 endTime; uint64 measurementDelay; uint16 maxShareBps; uint32 minViews; bytes32 rulesHash; }",
+  // Metric enum: 0=Views, 1=Likes, 2=Comments (YouTube API v3 does not expose shareCount)
+  "struct CampaignParams { address token; uint128 pool; uint64 startTime; uint64 endTime; uint64 measurementDelay; uint16 maxShareBps; uint32 minViews; bytes32 rulesHash; uint8 metric; bool requiresApproval; }",
   "struct Claim { address account; uint256 amount; bytes32[] proof; }",
-  "struct Campaign { address brand; address token; uint128 pool; uint128 totalAllocated; uint128 claimed; uint64 startTime; uint64 endTime; uint64 snapshotTime; uint64 rootPostedAt; uint16 maxShareBps; uint32 minViews; bytes32 rulesHash; bytes32 root; bytes32 snapshotHash; bool remainderRefunded; bool unclaimedSwept; }",
+  "struct Campaign { address brand; address token; uint128 pool; uint128 totalAllocated; uint128 claimed; uint64 startTime; uint64 endTime; uint64 snapshotTime; uint64 rootPostedAt; uint16 maxShareBps; uint32 minViews; bytes32 rulesHash; bytes32 root; bytes32 snapshotHash; bool remainderRefunded; bool unclaimedSwept; uint8 metric; bool requiresApproval; }",
 
   "function createCampaign(CampaignParams p) returns (uint256 id)",
   "function createCampaignWithPermit(CampaignParams p, uint256 deadline, uint8 v, bytes32 r, bytes32 s) returns (uint256 id)",
@@ -25,7 +26,7 @@ export const clipPoolAbi = parseAbi([
   "function DISPUTE_WINDOW() view returns (uint256)",
   "function MIN_MEASUREMENT_DELAY() view returns (uint256)",
 
-  "event CampaignCreated(uint256 indexed id, address indexed brand, address indexed token, uint128 pool, uint64 startTime, uint64 endTime, uint64 snapshotTime, uint16 maxShareBps, uint32 minViews, bytes32 rulesHash)",
+  "event CampaignCreated(uint256 indexed id, address indexed brand, address indexed token, uint128 pool, uint64 startTime, uint64 endTime, uint64 snapshotTime, uint16 maxShareBps, uint32 minViews, bytes32 rulesHash, uint8 metric, bool requiresApproval)",
   "event RootPosted(uint256 indexed id, bytes32 root, uint128 totalAllocated, bytes32 snapshotHash, uint64 disputeEndsAt)",
   "event RootCancelled(uint256 indexed id, bytes32 root)",
   "event Claimed(uint256 indexed id, address indexed account, uint256 amount)",

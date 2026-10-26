@@ -1,7 +1,7 @@
 import { keccak256, stringToBytes } from "viem";
 import { compareWallets, computeAllocation, normalizeWallet } from "./allocate";
 import { getProof } from "./tree";
-import type { CampaignInput, Hex, Submission } from "./types";
+import type { CampaignInput, EngagementMetric, Hex, Submission } from "./types";
 
 /** Recorded in every snapshot; bump when the algorithm or snapshot format changes. */
 export const SCRIPT_VERSION = "@clippool/allocation@0.1.0";
@@ -13,6 +13,8 @@ export interface SnapshotCampaign {
   pool: string;
   maxShareBps: number;
   minViews: string;
+  /** Engagement metric used to score submissions (default: "views"). */
+  metric?: EngagementMetric;
 }
 
 export interface SnapshotSubmission {
@@ -123,6 +125,7 @@ export function buildSnapshot(campaign: CampaignInput, submissions: readonly Sub
         pool: campaign.pool.toString(),
         maxShareBps: campaign.maxShareBps,
         minViews: campaign.minViews.toString(),
+        ...(campaign.metric && campaign.metric !== "views" ? { metric: campaign.metric } : {}),
       },
       submissions: subs,
     },
@@ -166,11 +169,15 @@ export function snapshotInputs(doc: unknown): { campaign: CampaignInput; submiss
   }
   const c = doc.inputs.campaign;
   if (typeof c.maxShareBps !== "number") throw new TypeError("inputs.campaign.maxShareBps must be a number");
+  const VALID_METRICS = new Set<string>(["views", "likes", "comments"]);
+  const metric: EngagementMetric =
+    c.metric && VALID_METRICS.has(c.metric as string) ? (c.metric as EngagementMetric) : "views";
   const campaign: CampaignInput = {
     id: parseDecimal(c.id, "inputs.campaign.id"),
     pool: parseDecimal(c.pool, "inputs.campaign.pool"),
     maxShareBps: c.maxShareBps,
     minViews: parseDecimal(c.minViews, "inputs.campaign.minViews"),
+    metric,
   };
   const submissions = doc.inputs.submissions.map((s: unknown, i: number): Submission => {
     if (!isObj(s) || typeof s.videoId !== "string" || typeof s.channelId !== "string" || typeof s.wallet !== "string") {

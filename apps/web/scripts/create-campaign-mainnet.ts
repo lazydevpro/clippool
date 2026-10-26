@@ -67,7 +67,7 @@ async function main() {
   const start = now;
   const end = now + BigInt(Math.round(days * 86400));
   const snapshot = end + delay;
-  const params = { token: USDC, pool, startTime: start, endTime: end, measurementDelay: delay, maxShareBps: Math.round(capPct * 100), minViews, rulesHash: keccak256(toBytes(rules)) };
+  const params = { token: USDC, pool, startTime: start, endTime: end, measurementDelay: delay, maxShareBps: Math.round(capPct * 100), minViews, rulesHash: keccak256(toBytes(rules)), metric: 0, requiresApproval: false };
 
   console.log(`\nClipPool ${clipPool} · Arc MAINNET\n`);
   console.log(`Title        ${title}`);

@@ -192,7 +192,7 @@ contract ClipPoolTest is ClipPoolBase {
     function test_create_storesCampaignAndPulls() public {
         uint256 before = usdc.balanceOf(brand);
         vm.expectEmit(address(cp));
-        emit ClipPool.CampaignCreated(1, brand, address(usdc), POOL, START, END, SNAPSHOT, 2000, 1000, RULES);
+        emit ClipPool.CampaignCreated(1, brand, address(usdc), POOL, START, END, SNAPSHOT, 2000, 1000, RULES, ClipPool.Metric.Views, false);
         uint256 id = _create();
         assertEq(id, 1);
         assertEq(cp.nextCampaignId(), 2);

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRightIcon, FileTextIcon, ReceiptIcon, ShieldCheckIcon, UploadIcon } from "lucide-react";
+import { ArrowRightIcon, ClipboardCheckIcon, FileTextIcon, ReceiptIcon, ShieldCheckIcon, UploadIcon } from "lucide-react";
 import { useConnection } from "wagmi";
 import type { CampaignDetail } from "@/lib/shared/api-types";
 import { buttonVariants } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import { useLeaderboard } from "@/hooks/use-api";
 import { useCircleSession } from "@/hooks/use-circle-session";
 import { bpsToPct, formatCompact, formatDelay, formatInt, formatToken, shortHash } from "@/lib/client/format";
 import { ACCEPTS_SUBMISSIONS, HAS_RECEIPTS, STATUS_META } from "@/lib/client/status";
+import { SubmissionReviewPanel } from "./submission-review";
+import { ENGAGEMENT_METRIC_LABELS } from "@/lib/shared/api-types";
 import { cn } from "@/lib/utils";
 import { campaignTitle } from "./campaign-card";
 import { CampaignLoader, PageContainer } from "./campaign-loader";
@@ -131,6 +133,7 @@ function CampaignBody({ c }: { c: CampaignDetail }) {
   const { address } = useConnection();
   const circle = useCircleSession();
   const highlight = [address, circle?.address].filter(Boolean) as string[];
+  const isBrand = address && address.toLowerCase() === c.brand.toLowerCase();
   const totalViews = lb.data?.totalViews;
 
   return (
@@ -166,10 +169,10 @@ function CampaignBody({ c }: { c: CampaignDetail }) {
             {formatToken(c.pool)} <span className="text-sm font-medium text-muted-foreground">{c.tokenSymbol}</span>
           </span>
         </Stat>
-        <Stat label="Creators" sub={`${formatInt(c.submissionsCount)} Shorts submitted`}>
+        <Stat label="Creators" sub={`${formatInt(c.submissionsCount)} Shorts submitted${c.pendingApprovalCount ? ` · ${c.pendingApprovalCount} pending review` : ""}`}>
           {formatInt(c.creatorsCount)}
         </Stat>
-        <Stat label="Total views" sub="Across qualifying Shorts">
+        <Stat label={`Total ${ENGAGEMENT_METRIC_LABELS[c.metric]?.toLowerCase() ?? "views"}`} sub="Across qualifying Shorts">
           {totalViews === undefined ? "—" : formatCompact(totalViews)}
         </Stat>
         <Stat label="Per-creator cap" sub={`max ${formatToken((BigInt(c.pool) * BigInt(c.maxShareBps)) / 10000n, c.tokenSymbol)}`}>
@@ -187,6 +190,10 @@ function CampaignBody({ c }: { c: CampaignDetail }) {
             onRetry={() => lb.refetch()}
             highlight={highlight}
           />
+          {/* Brand approval panel — visible only to the brand when requiresApproval is on */}
+          {c.requiresApproval && isBrand && (
+            <SubmissionReviewPanel campaign={c} brandWallet={address} />
+          )}
         </div>
         <aside className="space-y-6">
           <CampaignTimeline campaign={c} />
@@ -202,12 +209,24 @@ function CampaignBody({ c }: { c: CampaignDetail }) {
             )}
             <dl className="mt-4 grid grid-cols-2 gap-3 border-t pt-4 text-xs">
               <div>
-                <dt className="text-muted-foreground">Minimum views</dt>
+                <dt className="text-muted-foreground">Scoring metric</dt>
+                <dd className="mt-0.5 font-medium">{ENGAGEMENT_METRIC_LABELS[c.metric] ?? "Views"}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">Min {(ENGAGEMENT_METRIC_LABELS[c.metric] ?? "views").toLowerCase()}</dt>
                 <dd className="mt-0.5 font-medium num">{formatInt(c.minViews)} per Short</dd>
               </div>
               <div>
                 <dt className="text-muted-foreground">Measurement delay</dt>
                 <dd className="mt-0.5 font-medium">{formatDelay(c.snapshotTime - c.endTime)}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">Brand approval</dt>
+                <dd className="mt-0.5 font-medium flex items-center gap-1">
+                  {c.requiresApproval ? (
+                    <><ClipboardCheckIcon className="size-3 text-primary" />Required</>
+                  ) : "Not required"}
+                </dd>
               </div>
             </dl>
             <div className="mt-4 flex items-start gap-2 rounded-lg bg-muted/50 p-3 text-xs text-muted-foreground">

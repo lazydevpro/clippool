@@ -3,6 +3,13 @@ import type { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 export type Address = `0x${string}`;
 export type Hex = `0x${string}`;
 
+/**
+ * Engagement metric used to score submissions.
+ * Mirrors the contract's ClipPool.Metric enum (0=Views, 1=Likes, 2=Comments).
+ * YouTube API v3 does not expose shareCount, so shares are not supported.
+ */
+export type EngagementMetric = "views" | "likes" | "comments";
+
 /** One verified YouTube video submitted to a campaign. */
 export interface Submission {
   /** 11-char YouTube video id. */
@@ -11,7 +18,12 @@ export interface Submission {
   channelId: string;
   /** Payout wallet (any casing; compared lowercase, emitted checksummed). */
   wallet: string;
-  /** View count at snapshot time. */
+  /**
+   * Score for the selected engagement metric (views, likes, or comments).
+   * Historically named `views`; field name kept for backward compatibility.
+   * For views campaigns this is the view count; for likes/comments campaigns it
+   * is the like count / comment count at snapshot time.
+   */
   views: bigint;
 }
 
@@ -21,8 +33,13 @@ export interface CampaignInput {
   pool: bigint;
   /** Per-wallet cap in basis points; 10000 = no cap. */
   maxShareBps: number;
-  /** Submissions with views < minViews are dropped. */
+  /** Submissions with score < minViews are dropped (threshold applies to all metrics). */
   minViews: bigint;
+  /**
+   * Engagement metric used to score submissions.
+   * Defaults to "views" when omitted for backward compatibility.
+   */
+  metric?: EngagementMetric;
 }
 
 export interface Allocation {

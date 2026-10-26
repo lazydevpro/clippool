@@ -4,14 +4,19 @@ import type {
   CampaignDetail,
   CampaignListResponse,
   CampaignStatus,
+  CampaignSubmissionsResponse,
   CircleInitializeResponse,
   CircleSocialTokenResponse,
   CircleWalletsResponse,
   EligibleShort,
   EligibleShortsResponse,
+  EngagementMetric,
   LeaderboardEntry,
   LeaderboardResponse,
   ReceiptsResponse,
+  ReviewSubmissionRequest,
+  ReviewSubmissionResponse,
+  SubmissionForReview,
   SubmissionRequest,
   SubmissionResponse,
   YouTubeChannel,
@@ -93,6 +98,8 @@ interface MockCampaignSeed {
   minViews: number;
   rules: string;
   times: (now: number) => { start: number; end: number; snapshot: number; disputeEndsAt: number | null };
+  metric?: EngagementMetric;
+  requiresApproval?: boolean;
 }
 
 const SEEDS: MockCampaignSeed[] = [
@@ -103,7 +110,9 @@ const SEEDS: MockCampaignSeed[] = [
     pool: 5_000n * USDC,
     status: "live",
     maxShareBps: 2000,
-    minViews: 1000,
+    minViews: 500,
+    metric: "likes",
+    requiresApproval: true,
     rules: [
       "Make a YouTube Short (≤ 3 minutes) about Arc: what it is, why gas in USDC matters, or a demo of something you built.",
       "",
@@ -218,6 +227,9 @@ function detail(seed: MockCampaignSeed, now: number): CampaignDetail {
     totalAllocated: posted ? totalAllocated.toString() : null,
     claimed: claimed.toString(),
     disputeEndsAt: t.disputeEndsAt,
+    metric: seed.metric ?? "views",
+    requiresApproval: seed.requiresApproval ?? false,
+    pendingApprovalCount: seed.requiresApproval ? Math.max(0, board.length - 2) : 0,
   };
 }
 
@@ -270,6 +282,7 @@ export const mockApi = {
           startTime: d.startTime, endTime: d.endTime, snapshotTime: d.snapshotTime,
           maxShareBps: d.maxShareBps, minViews: d.minViews, status: d.status, title: d.title,
           submissionsCount: d.submissionsCount, creatorsCount: d.creatorsCount, disputeWindow: d.disputeWindow,
+          metric: d.metric, requiresApproval: d.requiresApproval, pendingApprovalCount: d.pendingApprovalCount,
         };
       }),
     };
@@ -343,8 +356,10 @@ export const mockApi = {
     if (mockSubmitted.has(m[1])) return { status: "rejected", reason: "duplicate" };
     mockSubmitted.add(m[1]);
     const linked = linkedTo(req.wallet);
+    const seed = seedFor(req.campaignId);
+    const isPendingApproval = seed?.requiresApproval ?? false;
     return {
-      status: "accepted",
+      status: isPendingApproval ? "pending_approval" : "accepted",
       submission: {
         videoId: m[1],
         channelId: linked[0]?.channelId ?? "UCdemo0000000000000000",
@@ -412,5 +427,36 @@ export const mockApi = {
       wallets: [{ id: "mock-wallet", address: MOCK_CIRCLE_WALLET, blockchain: CIRCLE_BLOCKCHAIN }],
       balances: { [MOCK_CIRCLE_WALLET]: { USDC: "1284650000", EURC: "312400000" } },
     };
+  },
+
+  async getCampaignSubmissions(campaignId: string): Promise<CampaignSubmissionsResponse> {
+    await sleep(400);
+    const seed = seedFor(campaignId);
+    if (!seed) throw new MockNotFoundError("Campaign not found");
+    const board = buildLeaderboard(seed);
+    const submissions: SubmissionForReview[] = board.flatMap((e, ei) =>
+      e.videos.slice(0, 2).map((v, vi) => ({
+        id: ei * 10 + vi + 1,
+        videoId: v.videoId,
+        channelId: e.channels[0]?.channelId ?? "UCdemo0000000000000000",
+        channelTitle: e.channels[0]?.title ?? "Demo Channel",
+        title: MOCK_SHORT_TITLES[vi % MOCK_SHORT_TITLES.length] ?? "Untitled Short",
+        thumbnailUrl: null,
+        wallet: e.wallet,
+        views: v.views,
+        likes: Math.floor(v.views * 0.04),
+        comments: Math.floor(v.views * 0.006),
+        brandReview: ei < 2 ? (vi === 0 ? "approved" : "rejected") as "approved" | "rejected" : null,
+        brandReviewNote: null,
+        publishedAt: Math.floor(Date.now() / 1000) - 7200 - ei * 3600,
+      })),
+    );
+    return { submissions };
+  },
+
+  async reviewSubmission(submissionId: number, req: ReviewSubmissionRequest): Promise<ReviewSubmissionResponse> {
+    await sleep(600);
+    void submissionId;
+    return { ok: true, decision: req.decision };
   },
 };

@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/client/api";
+import type { Address } from "viem";
 
 /** Retry only transient failures (network / gateway). 4xx and "not configured" 503s fail fast. */
 const retry = (count: number, err: unknown) => {
@@ -48,6 +49,16 @@ export function useCircleWallets(userToken: string | undefined) {
     queryKey: ["circle-wallets", userToken],
     queryFn: () => api.circleWallets(userToken!),
     enabled: Boolean(userToken),
+    refetchInterval: 30_000,
+    retry,
+  });
+}
+
+export function useCampaignSubmissions(campaignId: string | undefined, brandWallet: Address | undefined) {
+  return useQuery({
+    queryKey: ["campaign-submissions", campaignId, brandWallet],
+    queryFn: () => api.getCampaignSubmissions(campaignId!, brandWallet!),
+    enabled: Boolean(campaignId) && Boolean(brandWallet),
     refetchInterval: 30_000,
     retry,
   });

@@ -38,6 +38,8 @@ export function onchainCampaign(over: Partial<OnchainCampaign> = {}): OnchainCam
     snapshotHash: ZERO32,
     remainderRefunded: false,
     unclaimedSwept: false,
+    metric: 0,
+    requiresApproval: false,
     ...over,
   };
 }
@@ -176,6 +178,12 @@ export class FakeStore implements JobStore {
       .filter((a) => a.campaignId === campaignId && a.root === root.toLowerCase() && a.status === "pending")
       .map((a) => ({ wallet: getAddress(a.wallet) as Address, amount: BigInt(a.amount), proof: a.proof }));
   }
+  async reviewSubmission(campaignId: number, submissionId: number, decision: "approved" | "rejected"): Promise<boolean> {
+    const s = this.submissions.find((s) => s.campaignId === campaignId && s.id === submissionId);
+    if (!s) return false;
+    s.status = decision === "approved" ? "accepted" : "rejected";
+    return true;
+  }
   async submissionsToRefresh(now: number) {
     const live = new Set([...this.campaigns.values()].filter((c) => c.startTime <= now && c.snapshotTime > now).map((c) => c.id));
     return this.submissions.filter((s) => live.has(s.campaignId) && s.status === "accepted");
@@ -297,6 +305,8 @@ export function ytVideo(over: Partial<YtVideo> & { id: string }): YtVideo {
     privacyStatus: "public",
     uploadStatus: "processed",
     viewCount: 5000,
+    likeCount: null,
+    commentCount: null,
     thumbnailUrl: null,
     ...over,
   };

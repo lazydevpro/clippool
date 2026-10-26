@@ -79,6 +79,9 @@ export async function submitVideo(db: Db, youtube: YouTubeClient, input: SubmitI
     return rejected("channel_locked_to_other_wallet", "This channel is already linked to a different payout wallet for this campaign.");
   }
 
+  // If the campaign requires brand approval, land in "pending_approval" instead of "accepted".
+  const initialStatus = campaign.requiresApproval ? "pending_approval" : "accepted";
+
   const inserted = await db
     .insert(submissions)
     .values({
@@ -91,7 +94,7 @@ export async function submitVideo(db: Db, youtube: YouTubeClient, input: SubmitI
       wallet,
       publishedAt: new Date(v.publishedAt * 1000),
       durationSec: v.durationSec ?? 0,
-      status: "accepted",
+      status: initialStatus,
       proof: verdict.proof,
     })
     .onConflictDoNothing()
@@ -101,7 +104,7 @@ export async function submitVideo(db: Db, youtube: YouTubeClient, input: SubmitI
   const views = countableViews(v);
   await db.insert(viewObservations).values({ submissionId: inserted[0]!.id, views, fetchedAt: new Date(now * 1000) });
   return {
-    status: "accepted",
+    status: initialStatus,
     submission: { videoId, channelId: v.channelId, channelTitle: v.channelTitle, title: v.title, views, proof: verdict.proof },
   };
 }

@@ -61,7 +61,9 @@ abstract contract ClipPoolBase is Test {
             measurementDelay: DELAY,
             maxShareBps: 2000,
             minViews: 1000,
-            rulesHash: RULES
+            rulesHash: RULES,
+            metric: ClipPool.Metric.Views,
+            requiresApproval: false
         });
     }
 

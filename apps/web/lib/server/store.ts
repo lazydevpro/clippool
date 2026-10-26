@@ -57,10 +57,20 @@ export interface JobStore {
   // keeper
   campaignsReadyForPayout(now: number): Promise<CampaignRow[]>;
   pendingAllocations(campaignId: number, root: Hex): Promise<PendingAllocation[]>;
+  // brand review
+  /** Approve or reject a submission. Returns false if the submission doesn't belong to this campaign. */
+  reviewSubmission(campaignId: number, submissionId: number, decision: "approved" | "rejected", note?: string): Promise<boolean>;
   // refresh
   submissionsToRefresh(now: number): Promise<SubmissionRef[]>;
   // purge
   purge(now: Date): Promise<{ observationsDeleted: number; snapshotsPurged: number }>;
+}
+
+/** Maps the contract's Metric enum value (uint8) to its DB string. */
+function metricFromOnchain(metric: number): string {
+  if (metric === 1) return "likes";
+  if (metric === 2) return "comments";
+  return "views";
 }
 
 export function campaignRowFromChain(id: number, c: OnchainCampaign, disputeWindow: number) {
@@ -84,6 +94,8 @@ export function campaignRowFromChain(id: number, c: OnchainCampaign, disputeWind
     claimed: c.claimed.toString(),
     remainderRefunded: c.remainderRefunded,
     unclaimedSwept: c.unclaimedSwept,
+    metric: metricFromOnchain(c.metric),
+    requiresApproval: c.requiresApproval,
   };
 }
 
@@ -214,6 +226,20 @@ export function createDbStore(db: Db): JobStore {
         .from(allocations)
         .where(and(eq(allocations.campaignId, campaignId), eq(allocations.root, root.toLowerCase()), eq(allocations.status, "pending")));
       return rows.map((r) => ({ wallet: getAddress(r.wallet), amount: BigInt(r.amount), proof: r.proof }));
+    },
+    async reviewSubmission(campaignId, submissionId, decision, note) {
+      const newStatus = decision === "approved" ? "accepted" : "rejected";
+      const result = await db
+        .update(submissions)
+        .set({
+          brandReview: decision,
+          brandReviewNote: note ?? null,
+          brandReviewedAt: new Date(),
+          status: newStatus,
+        })
+        .where(and(eq(submissions.id, submissionId), eq(submissions.campaignId, campaignId)))
+        .returning({ id: submissions.id });
+      return result.length > 0;
     },
     async submissionsToRefresh(now) {
       const live = await db

@@ -27,6 +27,9 @@ export interface CreateCampaignInput {
   maxShareBps: number;
   minViews: number;
   rules: string;
+  /** 0=Views, 1=Likes, 2=Comments — mirrors ClipPool.Metric enum. */
+  metric?: number;
+  requiresApproval?: boolean;
 }
 
 export interface CreateCampaignCallbacks {
@@ -89,6 +92,8 @@ export async function createCampaignOnchain(
     maxShareBps: input.maxShareBps,
     minViews: input.minViews,
     rulesHash: rulesHashOf(input.rules),
+    metric: input.metric ?? 0,
+    requiresApproval: input.requiresApproval ?? false,
   } as const;
 
   cb.onStep("checking");

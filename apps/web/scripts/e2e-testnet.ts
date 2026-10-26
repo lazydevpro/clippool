@@ -81,6 +81,8 @@ async function main() {
       maxShareBps: MAX_SHARE_BPS,
       minViews: Number(MIN_VIEWS),
       rulesHash: keccak256(toBytes("ClipPool testnet E2E — synthetic submissions")),
+      metric: 0, // Metric.Views
+      requiresApproval: false,
     };
     const deadline = now + 3600n;
     const sig = await brand.signTypedData({

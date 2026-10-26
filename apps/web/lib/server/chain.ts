@@ -44,6 +44,9 @@ export interface OnchainCampaign {
   snapshotHash: Hex;
   remainderRefunded: boolean;
   unclaimedSwept: boolean;
+  /** 0=Views, 1=Likes, 2=Comments — mirrors ClipPool.Metric enum. */
+  metric: number;
+  requiresApproval: boolean;
 }
 
 export type ClipPoolEventName =
@@ -165,6 +168,8 @@ export function toOnchainCampaign(c: any): OnchainCampaign {
     snapshotHash: c.snapshotHash,
     remainderRefunded: Boolean(c.remainderRefunded),
     unclaimedSwept: Boolean(c.unclaimedSwept),
+    metric: Number(c.metric ?? 0),
+    requiresApproval: Boolean(c.requiresApproval ?? false),
   };
 }
 

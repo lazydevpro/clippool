@@ -84,7 +84,9 @@ contract ClipPoolFuzzTest is ClipPoolBase {
             measurementDelay: delay,
             maxShareBps: bps,
             minViews: 0,
-            rulesHash: bytes32(0)
+            rulesHash: bytes32(0),
+            metric: ClipPool.Metric.Views,
+            requiresApproval: false
         });
         vm.prank(brand);
         uint256 id = cp.createCampaign(p);

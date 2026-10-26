@@ -5,7 +5,7 @@ import type { ChainGateway, PostRootArgs } from "./chain";
 import { safeErrorMessage } from "./http";
 import type { JobStore } from "./store";
 import { YT_RETENTION_SEC } from "./store";
-import { countableViews, type YouTubeClient } from "./youtube";
+import { countableMetric, type YouTubeClient } from "./youtube";
 
 export interface OracleDeps {
   chain: ChainGateway;
@@ -33,16 +33,18 @@ export interface PreparedSnapshot {
 export async function prepareSnapshot(
   deps: Pick<OracleDeps, "store" | "youtube">,
   id: bigint,
-  params: { pool: bigint; maxShareBps: number; minViews: number },
+  params: { pool: bigint; maxShareBps: number; minViews: number; metric?: string },
 ): Promise<PreparedSnapshot> {
   // The engine does not dedupe videoIds; the DB's partial unique index already prevents duplicates,
   // this is belt-and-braces (first accepted row wins).
   const seen = new Set<string>();
   const subs = (await deps.store.acceptedSubmissions(Number(id))).filter((s) => !seen.has(s.videoId) && seen.add(s.videoId));
   const videos = subs.length ? await deps.youtube.getVideos(subs.map((s) => s.videoId)) : new Map();
-  const observations = subs.map((s) => ({ submissionId: s.id, views: countableViews(videos.get(s.videoId)) }));
+  // Use the campaign's engagement metric to score submissions; default to views.
+  const metric = (params.metric === "likes" || params.metric === "comments") ? params.metric : "views";
+  const observations = subs.map((s) => ({ submissionId: s.id, views: countableMetric(videos.get(s.videoId), metric) }));
   const snapshot = buildSnapshot(
-    { id, pool: params.pool, maxShareBps: params.maxShareBps, minViews: BigInt(params.minViews) },
+    { id, pool: params.pool, maxShareBps: params.maxShareBps, minViews: BigInt(params.minViews), metric },
     subs.map((s, i) => ({ videoId: s.videoId, channelId: s.channelId, wallet: s.wallet, views: BigInt(observations[i]!.views) })),
   );
   const hash = snapshotHash(snapshot);
@@ -62,7 +64,7 @@ async function processCampaign(deps: OracleDeps, row: CampaignRow, now: number):
   }
   if (now < onchain.snapshotTime) return { id: row.id, result: "error", reason: "snapshot time not reached onchain" };
 
-  const prepared = await prepareSnapshot(deps, id, onchain);
+  const prepared = await prepareSnapshot(deps, id, { ...onchain, metric: row.metric ?? "views" });
   const fetchedAt = new Date(now * 1000);
   await store.recordViews(prepared.observations, fetchedAt);
 

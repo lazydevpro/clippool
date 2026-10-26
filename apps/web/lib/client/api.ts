@@ -3,12 +3,15 @@ import type {
   CampaignDetail,
   CampaignListResponse,
   CampaignMetaRequest,
+  CampaignSubmissionsResponse,
   CircleInitializeResponse,
   CircleSocialTokenResponse,
   CircleWalletsResponse,
   EligibleShortsResponse,
   LeaderboardResponse,
   ReceiptsResponse,
+  ReviewSubmissionRequest,
+  ReviewSubmissionResponse,
   SubmissionRequest,
   SubmissionResponse,
   YouTubeChannelsResponse,
@@ -141,5 +144,21 @@ export const api = {
   circleWallets(userToken: string): Promise<CircleWalletsResponse> {
     if (USE_MOCKS) return mockApi.circleWallets();
     return request("/api/circle/wallets", { headers: { "x-user-token": userToken } });
+  },
+
+  /** GET /api/campaigns/:id/submissions?wallet=<brand> — list submissions for brand review. */
+  getCampaignSubmissions(campaignId: string, brandWallet: string): Promise<CampaignSubmissionsResponse> {
+    if (USE_MOCKS) return mockApi.getCampaignSubmissions(campaignId);
+    return request(`/api/campaigns/${enc(campaignId)}/submissions?wallet=${enc(brandWallet)}`);
+  },
+
+  /** POST /api/campaigns/:id/submissions/:subId/review — brand approves or rejects a submission. */
+  reviewSubmission(campaignId: string, submissionId: number, req: ReviewSubmissionRequest, brandWallet: string): Promise<ReviewSubmissionResponse> {
+    if (USE_MOCKS) return mockApi.reviewSubmission(submissionId, req);
+    return request(`/api/campaigns/${enc(campaignId)}/submissions/${submissionId}/review`, {
+      method: "POST",
+      body: JSON.stringify(req),
+      headers: { "x-brand-wallet": brandWallet },
+    });
   },
 };
