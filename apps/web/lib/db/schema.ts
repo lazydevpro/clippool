@@ -165,6 +165,9 @@ export const viewObservations = pgTable(
       .notNull()
       .references(() => submissions.id, { onDelete: "cascade" }),
     views: bigint("views", { mode: "number" }).notNull(),
+    /** Countable likes / comments (0 when hidden or disabled); null on rows recorded before v2. */
+    likes: bigint("likes", { mode: "number" }),
+    comments: bigint("comments", { mode: "number" }),
     fetchedAt: timestamp("fetched_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [

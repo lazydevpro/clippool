@@ -44,6 +44,35 @@ describe("runOracle", () => {
     env = setup();
   });
 
+  it("likes campaign: the split is computed on likes, while all three counts are recorded", async () => {
+    const chain = new FakeChain();
+    const store = new FakeStore();
+    const youtube = new FakeYouTube();
+    const c = onchainCampaign({ pool: 1_000_000n, maxShareBps: 10_000, minViews: 5, metric: 1 });
+    chain.campaigns.set("1", c);
+    store.campaigns.set(1, campaignRow(1, c));
+    store.submissions.push(
+      { id: 1, videoId: "aaaaaaaaaa1", channelId: "UCa", wallet: alice, campaignId: 1, status: "accepted" },
+      { id: 2, videoId: "bbbbbbbbbb1", channelId: "UCb", wallet: bob, campaignId: 1, status: "accepted" },
+    );
+    // Alice has more views, Bob has more likes → Bob must win a likes campaign.
+    youtube.videos.set("aaaaaaaaaa1", ytVideo({ id: "aaaaaaaaaa1", viewCount: 90_000, likeCount: 10, commentCount: 3 }));
+    youtube.videos.set("bbbbbbbbbb1", ytVideo({ id: "bbbbbbbbbb1", viewCount: 1_000, likeCount: 30, commentCount: null }));
+    await runOracle({ chain, store, youtube, now: () => NOW });
+
+    const expected = computeAllocation({ id: 1n, pool: 1_000_000n, maxShareBps: 10_000, minViews: 5n }, [
+      { videoId: "aaaaaaaaaa1", channelId: "UCa", wallet: alice, views: 10n },
+      { videoId: "bbbbbbbbbb1", channelId: "UCb", wallet: bob, views: 30n },
+    ]);
+    expect(chain.postRootCalls[0]!.root).toBe(expected.root);
+    const snap = store.snapshots[0]!.json as SnapshotDocument;
+    expect(snap.inputs.campaign.metric).toBe("likes");
+    expect(store.observations.map(({ views, likes, comments }) => ({ views, likes, comments }))).toEqual([
+      { views: 90_000, likes: 10, comments: 3 },
+      { views: 1_000, likes: 30, comments: 0 },
+    ]);
+  });
+
   it("final fetch → snapshot → allocations with proofs → simulate → postRoot with the engine's root", async () => {
     const { chain, store, youtube, c } = env;
     const out = await runOracle({ chain, store, youtube, now: () => NOW });

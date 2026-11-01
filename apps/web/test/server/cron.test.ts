@@ -63,7 +63,7 @@ describe("cronRoute", () => {
 });
 
 describe("refresh + purge jobs", () => {
-  it("refresh records views only for live/measuring campaigns", async () => {
+  it("refresh records views, likes and comments only for live/measuring campaigns", async () => {
     const store = new FakeStore();
     const youtube = new FakeYouTube();
     store.campaigns.set(1, campaignRow(1, onchainCampaign())); // start 1_000_000, snapshot 1_200_000
@@ -72,10 +72,10 @@ describe("refresh + purge jobs", () => {
       { id: 1, videoId: "v1", channelId: "c", wallet: "0x1", campaignId: 1, status: "accepted" },
       { id: 2, videoId: "v2", channelId: "c", wallet: "0x1", campaignId: 2, status: "accepted" },
     );
-    youtube.videos.set("v1", ytVideo({ id: "v1", viewCount: 777 }));
+    youtube.videos.set("v1", ytVideo({ id: "v1", viewCount: 777, likeCount: 42, commentCount: null })); // comments disabled → 0
     const r = await runRefresh({ store, youtube, now: () => 1_150_000 });
     expect(r).toMatchObject({ submissions: 1, observations: 1 });
-    expect(store.observations).toEqual([{ submissionId: 1, views: 777, fetchedAt: new Date(1_150_000_000) }]);
+    expect(store.observations).toEqual([{ submissionId: 1, views: 777, likes: 42, comments: 0, fetchedAt: new Date(1_150_000_000) }]);
   });
 
   it("purge deletes >30-day observations and nulls expired snapshot JSON", async () => {

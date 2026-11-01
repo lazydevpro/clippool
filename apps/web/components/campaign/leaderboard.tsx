@@ -2,7 +2,7 @@
 
 import { Fragment, useState } from "react";
 import { ChevronDownIcon, PlayIcon, TrophyIcon } from "lucide-react";
-import type { CampaignDetail, LeaderboardEntry, LeaderboardResponse } from "@/lib/shared/api-types";
+import { ENGAGEMENT_METRIC_LABELS, type CampaignDetail, type LeaderboardEntry, type LeaderboardResponse } from "@/lib/shared/api-types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Address } from "@/components/common/address";
@@ -43,7 +43,7 @@ function RankBadge({ rank }: { rank: number }) {
   );
 }
 
-function VideoList({ entry }: { entry: LeaderboardEntry }) {
+function VideoList({ entry, unit }: { entry: LeaderboardEntry; unit: string }) {
   return (
     <ul className="grid gap-2 sm:grid-cols-2">
       {entry.videos.map((v) => (
@@ -57,7 +57,7 @@ function VideoList({ entry }: { entry: LeaderboardEntry }) {
             <Thumb url={v.thumbnailUrl} title={v.title} />
             <span className="min-w-0">
               <span className="line-clamp-2 text-sm">{v.title}</span>
-              <span className="mt-1 block text-xs text-muted-foreground num">{formatInt(v.views)} views</span>
+              <span className="mt-1 block text-xs text-muted-foreground num">{formatInt(v.views)} {unit}</span>
             </span>
           </a>
         </li>
@@ -85,6 +85,8 @@ export function Leaderboard({
   const now = useNow();
   const final = FINAL.includes(campaign.status);
   const mine = new Set((highlight ?? []).map((a) => a.toLowerCase()));
+  const label = ENGAGEMENT_METRIC_LABELS[campaign.metric] ?? "Views";
+  const unit = label.toLowerCase();
 
   const toggle = (w: string) =>
     setOpen((prev) => {
@@ -104,13 +106,13 @@ export function Leaderboard({
           </h2>
           <p className="mt-0.5 text-xs text-muted-foreground">
             {final
-              ? "Views at the snapshot. Payouts are listed on the receipts page."
-              : "Estimated payouts at current views. The final split is computed at the snapshot."}
+              ? `${label} at the snapshot. Payouts are listed on the receipts page.`
+              : `Estimated payouts at current ${unit}. The final split is computed at the snapshot.`}
           </p>
         </div>
         {data && (
           <p className="text-xs text-muted-foreground">
-            <span className="num">{formatCompact(data.totalViews)}</span> total views
+            <span className="num">{formatCompact(data.totalViews)}</span> total {unit}
             {now !== null && data.updatedAt > 0 && (
               <>
                 {" · "}updated <span className="num">{formatDuration(Math.max(0, now - data.updatedAt))}</span> ago
@@ -153,7 +155,7 @@ export function Leaderboard({
             <TableRow className="hover:bg-transparent">
               <TableHead className="w-10 pl-3 sm:w-12 sm:pl-5">#</TableHead>
               <TableHead>Creator</TableHead>
-              <TableHead className="hidden text-right sm:table-cell">Views</TableHead>
+              <TableHead className="hidden text-right sm:table-cell">{label}</TableHead>
               <TableHead className="hidden text-right sm:table-cell">Share</TableHead>
               <TableHead className="text-right">{final ? "Payout" : "Est. payout"}</TableHead>
               <TableHead className="w-10 pr-3 sm:pr-5">
@@ -194,7 +196,7 @@ export function Leaderboard({
                             <span className="num">{e.videos.length}</span> {e.videos.length === 1 ? "Short" : "Shorts"}
                           </span>
                         </span>
-                        <span className="text-xs text-muted-foreground sm:hidden num">{formatCompact(e.views)} views</span>
+                        <span className="text-xs text-muted-foreground sm:hidden num">{formatCompact(e.views)} {unit}</span>
                       </div>
                     </TableCell>
                     <TableCell className="hidden text-right sm:table-cell num">
@@ -227,7 +229,7 @@ export function Leaderboard({
                   {isOpen && (
                     <TableRow id={panelId} className="hover:bg-transparent">
                       <TableCell colSpan={6} className="bg-muted/30 px-5 py-4 whitespace-normal">
-                        <VideoList entry={e} />
+                        <VideoList entry={e} unit={unit} />
                       </TableCell>
                     </TableRow>
                   )}

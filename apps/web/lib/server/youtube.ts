@@ -231,6 +231,16 @@ export function countableMetric(video: YtVideo | undefined, metric: "views" | "l
   return Number.isFinite(video.viewCount) && video.viewCount > 0 ? Math.floor(video.viewCount) : 0;
 }
 
+export type EngagementMetricName = "views" | "likes" | "comments";
+
+/** All countable engagement numbers for one video, as stored in view_observations. */
+export function videoStats(video: YtVideo | undefined): { views: number; likes: number; comments: number } {
+  return { views: countableMetric(video, "views"), likes: countableMetric(video, "likes"), comments: countableMetric(video, "comments") };
+}
+
+/** Campaign metric column (DB string) → a safe metric name; anything unknown scores by views. */
+export const metricOf = (m: string | null | undefined): EngagementMetricName => (m === "likes" || m === "comments" ? m : "views");
+
 // ───────────────────────────── validation ─────────────────────────────
 
 export const MAX_SHORT_DURATION_SEC = 180;

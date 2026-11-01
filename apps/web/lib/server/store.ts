@@ -51,7 +51,7 @@ export interface JobStore {
   // oracle
   campaignsAwaitingRoot(now: number): Promise<CampaignRow[]>;
   acceptedSubmissions(campaignId: number): Promise<SubmissionRef[]>;
-  recordViews(rows: { submissionId: number; views: number }[], fetchedAt: Date): Promise<void>;
+  recordViews(rows: Observation[], fetchedAt: Date): Promise<void>;
   saveSnapshot(input: SaveSnapshotInput): Promise<void>;
   setOracleNote(id: number, note: string, opts?: { hold?: boolean; rootTx?: Hex }): Promise<void>;
   // keeper
@@ -64,6 +64,14 @@ export interface JobStore {
   submissionsToRefresh(now: number): Promise<SubmissionRef[]>;
   // purge
   purge(now: Date): Promise<{ observationsDeleted: number; snapshotsPurged: number }>;
+}
+
+/** One YouTube statistics reading for a submission (see videoStats). */
+export interface Observation {
+  submissionId: number;
+  views: number;
+  likes: number;
+  comments: number;
 }
 
 /** Maps the contract's Metric enum value (uint8) to its DB string. */

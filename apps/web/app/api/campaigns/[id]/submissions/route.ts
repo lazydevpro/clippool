@@ -43,8 +43,8 @@ export const GET = route(
         brandReview: submissions.brandReview,
         brandReviewNote: submissions.brandReviewNote,
         status: submissions.status,
-        latestViews: sql<number | null>`(
-          select vo.views
+        latest: sql<{ views: number; likes: number | null; comments: number | null } | null>`(
+          select json_build_object('views', vo.views, 'likes', vo.likes, 'comments', vo.comments)
           from ${viewObservations} vo
           where vo.submission_id = ${submissions.id}
           order by vo.fetched_at desc
@@ -66,9 +66,9 @@ export const GET = route(
       publishedAt: Math.floor(r.publishedAt.getTime() / 1000),
       brandReview: r.brandReview,
       brandReviewNote: r.brandReviewNote ?? null,
-      views: r.latestViews ?? null,
-      likes: null,    // not stored server-side yet
-      comments: null, // not stored server-side yet
+      views: r.latest ? Number(r.latest.views) : null,
+      likes: r.latest?.likes != null ? Number(r.latest.likes) : null,
+      comments: r.latest?.comments != null ? Number(r.latest.comments) : null,
     }));
 
     return json<CampaignSubmissionsResponse>({ submissions: result });

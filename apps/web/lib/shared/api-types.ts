@@ -74,8 +74,8 @@ export interface LeaderboardEntry {
   estimatedAmount: string; // pro-rata estimate with current views (allocation engine)
   sharePct: number;        // 0–100
 }
-/** GET /api/campaigns/:id/leaderboard */
-export interface LeaderboardResponse { updatedAt: number; totalViews: number; entries: LeaderboardEntry[] }
+/** GET /api/campaigns/:id/leaderboard. `views` / `totalViews` hold scores in the campaign's `metric` (views, likes or comments). */
+export interface LeaderboardResponse { updatedAt: number; metric: EngagementMetric; totalViews: number; entries: LeaderboardEntry[] }
 
 /** POST /api/submissions */
 export interface SubmissionRequest { campaignId: string; videoUrl: string; wallet: `0x${string}` }

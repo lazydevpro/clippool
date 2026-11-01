@@ -18,7 +18,7 @@ export const GET = route("GET /api/campaigns/[id]/leaderboard", async (_req: Req
   const campaign = await getCampaignRow(db, id);
   if (!campaign) throw new HttpError(404, "campaign_not_found", "Campaign not found");
   const now = Math.floor(Date.now() / 1000);
-  const body = buildLeaderboard(campaign, await leaderboardRows(db, id, now), now);
+  const body = buildLeaderboard(campaign, await leaderboardRows(db, id, now, campaign.metric), now);
   if (cache.size > 500) cache.clear();
   cache.set(id, { at: Date.now(), body });
   return json<LeaderboardResponse>(body, { headers });

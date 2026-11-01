@@ -79,7 +79,7 @@ export class FakeStore implements JobStore {
   sync = new Map<number, bigint>();
   campaigns = new Map<number, CampaignRow>();
   submissions: (SubmissionRef & { campaignId: number; status: string })[] = [];
-  observations: { submissionId: number; views: number; fetchedAt: Date }[] = [];
+  observations: { submissionId: number; views: number; likes?: number; comments?: number; fetchedAt: Date }[] = [];
   snapshots: (Omit<SaveSnapshotInput, "allocations"> & { json: unknown })[] = [];
   allocations: FakeAllocation[] = [];
   calls: string[] = [];
@@ -136,7 +136,7 @@ export class FakeStore implements JobStore {
       .filter((s) => s.campaignId === campaignId && s.status === "accepted")
       .map(({ id, videoId, channelId, wallet }) => ({ id, videoId, channelId, wallet }));
   }
-  async recordViews(rows: { submissionId: number; views: number }[], fetchedAt: Date) {
+  async recordViews(rows: { submissionId: number; views: number; likes: number; comments: number }[], fetchedAt: Date) {
     this.observations.push(...rows.map((r) => ({ ...r, fetchedAt })));
   }
   async saveSnapshot(input: SaveSnapshotInput) {

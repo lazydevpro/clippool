@@ -37,7 +37,14 @@ describe("buildLeaderboard", () => {
   });
 
   it("empty campaign", () => {
-    expect(buildLeaderboard(campaign, [], 1)).toEqual({ updatedAt: 1, totalViews: 0, entries: [] });
+    expect(buildLeaderboard(campaign, [], 1)).toEqual({ updatedAt: 1, metric: "views", totalViews: 0, entries: [] });
+  });
+
+  it("reports the campaign metric; scores are whatever leaderboardRows selected for it", () => {
+    const lb = buildLeaderboard({ ...campaign, minViews: 5, metric: "likes" }, [{ ...rows[0]!, views: 40 }, { ...rows[2]!, views: 10 }], 1);
+    expect(lb.metric).toBe("likes");
+    expect(lb.totalViews).toBe(50);
+    expect(lb.entries.map((e) => e.sharePct)).toEqual([80, 20]);
   });
 });
 

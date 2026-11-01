@@ -298,7 +298,7 @@ export const mockApi = {
     const s = seedFor(id);
     if (!s) throw new MockNotFoundError("Campaign not found");
     const entries = buildLeaderboard(s);
-    return { updatedAt: nowSec() - 240, totalViews: entries.reduce((a, e) => a + e.views, 0), entries };
+    return { updatedAt: nowSec() - 240, metric: "views", totalViews: entries.reduce((a, e) => a + e.views, 0), entries };
   },
   async getReceipts(id: string): Promise<ReceiptsResponse> {
     await sleep(400);

@@ -5,7 +5,7 @@ import type { Db } from "@/lib/db";
 import { campaigns, channelOwners, channelWallets, submissions, viewObservations } from "@/lib/db/schema";
 import type { SubmissionResponse } from "@/lib/shared/api-types";
 import { HttpError } from "./http";
-import { countableViews, parseVideoId, precheckSubmission, validateSubmission, type YouTubeClient } from "./youtube";
+import { countableViews, parseVideoId, videoStats, precheckSubmission, validateSubmission, type YouTubeClient } from "./youtube";
 
 export interface SubmitInput {
   campaignId: number;
@@ -102,7 +102,7 @@ export async function submitVideo(db: Db, youtube: YouTubeClient, input: SubmitI
   if (inserted.length === 0) return rejected("duplicate", "This video was already submitted to this campaign.");
 
   const views = countableViews(v);
-  await db.insert(viewObservations).values({ submissionId: inserted[0]!.id, views, fetchedAt: new Date(now * 1000) });
+  await db.insert(viewObservations).values({ submissionId: inserted[0]!.id, ...videoStats(v), fetchedAt: new Date(now * 1000) });
   return {
     status: initialStatus,
     submission: { videoId, channelId: v.channelId, channelTitle: v.channelTitle, title: v.title, views, proof: verdict.proof },

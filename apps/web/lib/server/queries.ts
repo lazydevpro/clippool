@@ -4,10 +4,10 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import type { Db } from "@/lib/db";
 import { allocations, campaignMeta, campaigns, snapshots, submissions, viewObservations } from "@/lib/db/schema";
 import type { CampaignMetaRow, CampaignRow } from "@/lib/db/schema";
+import { metricOf } from "./youtube";
 import type {
   CampaignDetail,
   CampaignSummary,
-  EngagementMetric,
   LeaderboardEntry,
   LeaderboardResponse,
   ReceiptsResponse,
@@ -41,11 +41,6 @@ export function statusOf(c: CampaignRow, now: number, disputeWindow: number) {
   );
 }
 
-function safeMetric(m: string | null | undefined): EngagementMetric {
-  if (m === "likes" || m === "comments") return m;
-  return "views";
-}
-
 export function toSummary(
   c: CampaignRow,
   meta: Pick<CampaignMetaRow, "title" | "verified"> | null,
@@ -70,7 +65,7 @@ export function toSummary(
     submissionsCount: counts.submissions,
     creatorsCount: counts.creators,
     disputeWindow,
-    metric: safeMetric(c.metric),
+    metric: metricOf(c.metric),
     requiresApproval: c.requiresApproval ?? false,
     pendingApprovalCount: counts.pendingApproval,
   };
@@ -144,12 +139,15 @@ export interface LeaderboardRow {
   title: string;
   thumbnailUrl: string | null;
   wallet: string;
-  views: number | null; // latest observation ≤ 30 days old, null if none
+  views: number | null; // score in the campaign metric from the latest observation ≤ 30 days old, null if none
 }
 
-/** Pure: aggregate per wallet and estimate shares with the allocation engine on current views. */
+/** view_observations column holding each metric's count (fixed whitelist → safe for sql.raw). */
+const METRIC_COLUMN = { views: "views", likes: "likes", comments: "comments" } as const;
+
+/** Pure: aggregate per wallet and estimate shares with the allocation engine on current scores (views, likes or comments). */
 export function buildLeaderboard(
-  campaign: { id: number; pool: string; maxShareBps: number; minViews: number },
+  campaign: { id: number; pool: string; maxShareBps: number; minViews: number; metric?: string | null },
   rows: LeaderboardRow[],
   updatedAt: number,
 ): LeaderboardResponse {
@@ -183,13 +181,14 @@ export function buildLeaderboard(
     return d !== 0n ? (d > 0n ? 1 : -1) : b.views - a.views || (a.wallet.toLowerCase() < b.wallet.toLowerCase() ? -1 : 1);
   });
   for (const e of entries) e.videos.sort((a, b) => b.views - a.views);
-  return { updatedAt, totalViews: entries.reduce((s, e) => s + e.views, 0), entries };
+  return { updatedAt, metric: metricOf(campaign.metric), totalViews: entries.reduce((s, e) => s + e.views, 0), entries };
 }
 
-export async function leaderboardRows(db: Db, campaignId: number, now: number): Promise<LeaderboardRow[]> {
+export async function leaderboardRows(db: Db, campaignId: number, now: number, metric?: string | null): Promise<LeaderboardRow[]> {
   const cutoff = new Date((now - YT_RETENTION_SEC) * 1000);
+  const column = sql.raw(`vo.${METRIC_COLUMN[metricOf(metric)]}`);
   const latestViews = sql<number | null>`(
-    select vo.views from ${viewObservations} vo
+    select ${column} from ${viewObservations} vo
     where vo.submission_id = ${submissions.id} and vo.fetched_at > ${cutoff.toISOString()}::timestamptz
     order by vo.fetched_at desc limit 1)`;
   const rows = await db

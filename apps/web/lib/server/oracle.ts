@@ -3,9 +3,9 @@ import type { Hex } from "viem";
 import type { CampaignRow } from "@/lib/db/schema";
 import type { ChainGateway, PostRootArgs } from "./chain";
 import { safeErrorMessage } from "./http";
-import type { JobStore } from "./store";
+import type { JobStore, Observation } from "./store";
 import { YT_RETENTION_SEC } from "./store";
-import { countableMetric, type YouTubeClient } from "./youtube";
+import { countableMetric, metricOf, videoStats, type YouTubeClient } from "./youtube";
 
 export interface OracleDeps {
   chain: ChainGateway;
@@ -26,7 +26,7 @@ export interface PreparedSnapshot {
   snapshot: SnapshotDocument;
   hash: Hex;
   args: PostRootArgs;
-  observations: { submissionId: number; views: number }[];
+  observations: Observation[];
 }
 
 /** Final fetch → snapshot → root/hash. Pure apart from the YouTube call. */
@@ -41,11 +41,12 @@ export async function prepareSnapshot(
   const subs = (await deps.store.acceptedSubmissions(Number(id))).filter((s) => !seen.has(s.videoId) && seen.add(s.videoId));
   const videos = subs.length ? await deps.youtube.getVideos(subs.map((s) => s.videoId)) : new Map();
   // Use the campaign's engagement metric to score submissions; default to views.
-  const metric = (params.metric === "likes" || params.metric === "comments") ? params.metric : "views";
-  const observations = subs.map((s) => ({ submissionId: s.id, views: countableMetric(videos.get(s.videoId), metric) }));
+  const metric = metricOf(params.metric);
+  const observations = subs.map((s) => ({ submissionId: s.id, ...videoStats(videos.get(s.videoId)) }));
+  const scores = subs.map((s) => countableMetric(videos.get(s.videoId), metric));
   const snapshot = buildSnapshot(
     { id, pool: params.pool, maxShareBps: params.maxShareBps, minViews: BigInt(params.minViews), metric },
-    subs.map((s, i) => ({ videoId: s.videoId, channelId: s.channelId, wallet: s.wallet, views: BigInt(observations[i]!.views) })),
+    subs.map((s, i) => ({ videoId: s.videoId, channelId: s.channelId, wallet: s.wallet, views: BigInt(scores[i]!) })),
   );
   const hash = snapshotHash(snapshot);
   const totalAllocated = BigInt(snapshot.totalAllocated);
