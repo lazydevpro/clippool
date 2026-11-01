@@ -349,7 +349,7 @@ export default function Home() {
                 <span className="text-success">your score</span> / total score, cap)
               </p>
               <p className="mt-2 text-xs text-muted-foreground not-italic font-sans">
-                score = views <span className="mx-1 opacity-40">|</span> likes <span className="mx-1 opacity-40">|</span> comments — brand's choice
+                score = views <span className="mx-1 opacity-40">|</span> likes <span className="mx-1 opacity-40">|</span> comments — brand&apos;s choice
               </p>
             </div>
           </div>

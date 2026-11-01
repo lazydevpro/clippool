@@ -1,6 +1,7 @@
 // Create a REAL ClipPool campaign on Arc MAINNET from the DEPLOYER wallet (.env.mainnet).
 // YOU run this — it locks real USDC. Prints every setting and asks you to type CREATE first.
 // Usage (from apps/web): pnpm campaign:mainnet [--title "…"] [--pool 5] [--days 7] [--delay-hours 24] [--cap 50] [--min-views 50]
+//                          [--metric views|likes|comments] [--approval]   (--approval = brand reviews each Short)
 import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline/promises";
@@ -30,6 +31,10 @@ async function main() {
   const delayHours = Number(arg("delay-hours", "24"));
   const capPct = Number(arg("cap", "50"));
   const minViews = Number(arg("min-views", "50"));
+  const metricName = arg("metric", "views");
+  const metric = ["views", "likes", "comments"].indexOf(metricName);
+  if (metric < 0) throw new Error("--metric must be views, likes or comments");
+  const requiresApproval = process.argv.includes("--approval");
   const rules = [
     "Make a YouTube Short (max 3 minutes) about ClipPool or Arc: how creators get paid per view, USDC payouts on Arc, or your take on fair creator pay.",
     "",
@@ -39,9 +44,10 @@ async function main() {
     "• Disclose the sponsorship: #ad or YouTube's \"includes paid promotion\" label.",
     "",
     "How you get paid",
-    `• The pool is split by each creator's views at the snapshot, ${delayHours}h after submissions close.`,
+    ...(requiresApproval ? ["• The brand reviews each Short; only approved Shorts count."] : []),
+    `• The pool is split by each creator's ${metricName} at the snapshot, ${delayHours}h after submissions close.`,
     `• One creator can earn at most ${capPct}% of the pool; the rest goes to the other creators.`,
-    `• Shorts with fewer than ${minViews} views at the snapshot don't count.`,
+    `• Shorts with fewer than ${minViews} ${metricName} at the snapshot don't count.`,
     "• Paid automatically in USDC on Arc mainnet after the 48-hour review window. No claiming.",
   ].join("\n");
 
@@ -67,12 +73,13 @@ async function main() {
   const start = now;
   const end = now + BigInt(Math.round(days * 86400));
   const snapshot = end + delay;
-  const params = { token: USDC, pool, startTime: start, endTime: end, measurementDelay: delay, maxShareBps: Math.round(capPct * 100), minViews, rulesHash: keccak256(toBytes(rules)), metric: 0, requiresApproval: false };
+  const params = { token: USDC, pool, startTime: start, endTime: end, measurementDelay: delay, maxShareBps: Math.round(capPct * 100), minViews, rulesHash: keccak256(toBytes(rules)), metric, requiresApproval };
 
   console.log(`\nClipPool ${clipPool} · Arc MAINNET\n`);
   console.log(`Title        ${title}`);
   console.log(`Brand        ${account.address} (balance ${usd(bal)})`);
-  console.log(`Pool         ${usd(pool)}  · cap ${capPct}% (${usd((pool * BigInt(params.maxShareBps)) / 10000n)}) · min views ${minViews}`);
+  console.log(`Pool         ${usd(pool)}  · cap ${capPct}% (${usd((pool * BigInt(params.maxShareBps)) / 10000n)}) · min ${metricName} ${minViews}`);
+  console.log(`Scoring      ${metricName}${requiresApproval ? " · brand approval required" : ""}`);
   console.log(`Opens        ${when(start)} (now)`);
   console.log(`Closes       ${when(end)}  (${days} days)`);
   console.log(`Snapshot     ${when(snapshot)}  (+${delayHours}h)`);

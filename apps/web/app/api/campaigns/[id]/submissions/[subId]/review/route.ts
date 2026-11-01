@@ -3,19 +3,23 @@ import { z } from "zod";
 import { getDb } from "@/lib/db";
 import { campaigns } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { getPublicClient } from "@/lib/server/chain";
 import { HttpError, json, parseCampaignId, readJson, route } from "@/lib/server/http";
+import { assertBrandReview } from "@/lib/server/review";
 import { createDbStore } from "@/lib/server/store";
 import type { ReviewSubmissionResponse } from "@/lib/shared/api-types";
 
 const reviewSchema = z.object({
   decision: z.enum(["approved", "rejected"]),
   note: z.string().max(500).optional(),
+  issuedAt: z.number().int().positive(),
+  signature: z.string().regex(/^0x[0-9a-fA-F]+$/),
 });
 
 /**
  * POST /api/campaigns/:id/submissions/:subId/review
- * Brand approves or rejects a pending submission.
- * The caller must be the campaign brand (verified via x-brand-wallet header).
+ * Brand approves or rejects a pending submission. The body carries the brand wallet's signature over
+ * `reviewMessage(...)` (lib/shared/review.ts); the brand address alone is public, so it is not proof.
  */
 export const POST = route(
   "POST /api/campaigns/[id]/submissions/[subId]/review",
@@ -24,23 +28,32 @@ export const POST = route(
     const { id: idRaw, subId: subIdRaw } = await ctx.params;
     const campaignId = await parseCampaignId(Promise.resolve({ id: idRaw }));
 
-    const subId = parseInt(subIdRaw, 10);
-    if (!Number.isFinite(subId) || subId <= 0) {
+    const subId = Number(subIdRaw);
+    if (!Number.isSafeInteger(subId) || subId <= 0) {
       throw new HttpError(400, "invalid_submission_id", "Submission id must be a positive integer");
     }
 
-    const brandWallet = req.headers.get("x-brand-wallet");
-    if (!brandWallet) throw new HttpError(400, "missing_wallet", "x-brand-wallet header is required");
+    const body = reviewSchema.parse(await readJson(req));
 
     const db = getDb();
-    const [campaign] = await db.select({ brand: campaigns.brand })
-      .from(campaigns).where(eq(campaigns.id, campaignId));
+    const [campaign] = await db
+      .select({ id: campaigns.id, brand: campaigns.brand, snapshotTime: campaigns.snapshotTime })
+      .from(campaigns)
+      .where(eq(campaigns.id, campaignId));
     if (!campaign) throw new HttpError(404, "campaign_not_found", "Campaign not found");
-    if (campaign.brand.toLowerCase() !== brandWallet.toLowerCase()) {
-      throw new HttpError(403, "forbidden", "Only the campaign brand can review submissions");
-    }
 
-    const body = reviewSchema.parse(await readJson(req));
+    const client = getPublicClient();
+    await assertBrandReview(
+      {
+        campaign,
+        submissionId: subId,
+        decision: body.decision,
+        issuedAt: body.issuedAt,
+        signature: body.signature as `0x${string}`,
+        now: Math.floor(Date.now() / 1000),
+      },
+      (args) => client.verifyMessage(args),
+    );
 
     const store = createDbStore(db);
     const updated = await store.reviewSubmission(campaignId, subId, body.decision, body.note);

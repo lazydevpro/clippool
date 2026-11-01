@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CheckIcon, MessageSquareIcon, ThumbsDownIcon, ThumbsUpIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import type { Address } from "viem";
+import { useSignMessage } from "wagmi";
 import type { CampaignDetail, SubmissionForReview } from "@/lib/shared/api-types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState, ErrorState } from "@/components/common/states";
 import { useCampaignSubmissions } from "@/hooks/use-api";
 import { api } from "@/lib/client/api";
+import { reviewMessage } from "@/lib/shared/review";
 import { formatInt } from "@/lib/client/format";
 import { cn } from "@/lib/utils";
 
@@ -32,11 +34,14 @@ function SubmissionCard({
   onReviewed: () => void;
 }) {
   const [loading, setLoading] = useState<"approve" | "reject" | null>(null);
+  const { signMessageAsync } = useSignMessage();
 
   const decide = async (decision: "approved" | "rejected") => {
     setLoading(decision === "approved" ? "approve" : "reject");
     try {
-      await api.reviewSubmission(campaignId, sub.id, { decision }, brandWallet);
+      const issuedAt = Math.floor(Date.now() / 1000);
+      const signature = await signMessageAsync({ account: brandWallet, message: reviewMessage(campaignId, sub.id, decision, issuedAt) });
+      await api.reviewSubmission(campaignId, sub.id, { decision, issuedAt, signature });
       toast.success(decision === "approved" ? "Submission approved" : "Submission rejected");
       onReviewed();
     } catch (e) {

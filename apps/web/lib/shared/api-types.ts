@@ -125,11 +125,13 @@ export interface CampaignSubmissionsResponse {
 }
 
 /** POST /api/campaigns/:id/submissions/:subId/review — brand approves or rejects a submission.
- *  Body: { decision: "approved" | "rejected"; note?: string }
- *  Auth: x-brand-wallet header matching campaign brand address (or wallet signature in future). */
+ *  Auth: `signature` is the brand wallet's personal_sign over `reviewMessage(id, subId, decision, issuedAt)`. */
 export interface ReviewSubmissionRequest {
   decision: "approved" | "rejected";
   note?: string;
+  /** Unix seconds; must be within REVIEW_SIG_MAX_AGE_SEC of the server clock. */
+  issuedAt: number;
+  signature: `0x${string}`;
 }
 export interface ReviewSubmissionResponse { ok: true; decision: "approved" | "rejected" }
 

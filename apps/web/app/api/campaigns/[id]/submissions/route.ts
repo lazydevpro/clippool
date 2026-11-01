@@ -1,7 +1,7 @@
 import { connection } from "next/server";
 import { getDb } from "@/lib/db";
 import { campaigns, submissions, viewObservations } from "@/lib/db/schema";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { getAddress } from "viem";
 import { HttpError, json, parseCampaignId, route } from "@/lib/server/http";
 import type { CampaignSubmissionsResponse, SubmissionForReview } from "@/lib/shared/api-types";

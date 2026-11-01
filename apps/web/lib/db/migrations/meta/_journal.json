@@ -15,6 +15,13 @@
       "when": 1791804387401,
       "tag": "0001_youtube_oauth",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793559540834,
+      "tag": "0002_brand_review_metric",
+      "breakpoints": true
     }
   ]
 }

@@ -153,12 +153,11 @@ export const api = {
   },
 
   /** POST /api/campaigns/:id/submissions/:subId/review — brand approves or rejects a submission. */
-  reviewSubmission(campaignId: string, submissionId: number, req: ReviewSubmissionRequest, brandWallet: string): Promise<ReviewSubmissionResponse> {
+  reviewSubmission(campaignId: string, submissionId: number, req: ReviewSubmissionRequest): Promise<ReviewSubmissionResponse> {
     if (USE_MOCKS) return mockApi.reviewSubmission(submissionId, req);
     return request(`/api/campaigns/${enc(campaignId)}/submissions/${submissionId}/review`, {
       method: "POST",
       body: JSON.stringify(req),
-      headers: { "x-brand-wallet": brandWallet },
     });
   },
 };

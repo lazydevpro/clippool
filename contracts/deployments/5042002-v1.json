@@ -1,0 +1,8 @@
+{
+  "address": "0x50519aFfe82591afd402c7F22ad9BC6DD2d86030",
+  "deployBlock": 66805620,
+  "disputeWindow": 600,
+  "guardian": "0x86f5aa95928fC0741Fd5c845e9438006a84adA30",
+  "minMeasurementDelay": 300,
+  "oracle": "0x35841229a1e2297baEb6ccD8BB6049749C4AF38C"
+}
