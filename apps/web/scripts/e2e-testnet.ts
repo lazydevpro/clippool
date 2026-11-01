@@ -179,8 +179,10 @@ async function main() {
       const after = await publicClient.readContract({ address: USDC, abi: erc20PermitAbi, functionName: "balanceOf", args: [p.wallet as Address] });
       const isSender = p.wallet.toLowerCase() === keeper.account.address.toLowerCase();
       const got = after - (before.get(p.wallet) ?? 0n) + (isSender ? gasPaid6 : 0n);
-      if (got !== BigInt(p.amount)) throw new Error(`${p.wallet} received ${usd(got)}, expected ${usd(BigInt(p.amount))}`);
-      ok(`${p.wallet} +${usd(got)} (matches allocation)`);
+      // The 6-dp view floors the 18-dp balance, so the sender's gas add-back can be off by 1 base unit.
+      const diff = got - BigInt(p.amount);
+      if (diff !== 0n && !(isSender && (diff === 1n || diff === -1n))) throw new Error(`${p.wallet} received ${usd(got)}, expected ${usd(BigInt(p.amount))}`);
+      ok(`${p.wallet} +${usd(isSender ? BigInt(p.amount) : got)} (matches allocation)`);
     }
   }
 
