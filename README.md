@@ -9,7 +9,7 @@ split **by views** — with a per-creator cap — and paid to every creator's wa
 
 ▶️ **[Watch the 2½-minute demo](https://youtu.be/6AJOfA3wmtU)** — a brand funds a campaign, a creator submits a real Short, and the pool is paid out onchain.
 
-> Status: **live on Arc mainnet** at **https://clippool.fun** · contract [`0xDb22…Dfb9`](https://explorer.arc.io/address/0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9) (verified) · launch campaign live: [clippool.fun/c/1](https://clippool.fun/c/1) · proven end-to-end on testnet ([runbook](docs/runbooks/mainnet.md)). Built for [Arc Microgrants](https://dorahacks.io/hackathon/arc-microgrants/detail).
+> Status: **live on Arc mainnet** at **https://clippool.fun** · contract v2 [`0xAe32…b89a`](https://explorer.arc.io/address/0xAe32115c22ccdc7eb1654053023aCaD84050b89a) (verified) · launch campaign live (scored by likes, brand-approved): [clippool.fun/c/1](https://clippool.fun/c/1) · proven end-to-end on testnet ([runbook](docs/runbooks/mainnet.md)). Built for [Arc Microgrants](https://dorahacks.io/hackathon/arc-microgrants/detail).
 
 ---
 
@@ -64,8 +64,12 @@ Creator ── Connect YouTube / binding code ─▶ │  (Arc, USDC/EURC)  │ 
 
 | Network | ClipPool | Windows |
 |---|---|---|
-| Arc testnet (5042002) | [`0x50519aFfe82591afd402c7F22ad9BC6DD2d86030`](https://explorer.testnet.arc.io/address/0x50519affe82591afd402c7f22ad9bc6dd2d86030) (verified) | dispute 10 min · min measurement 5 min |
-| Arc mainnet (5042) | [`0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9`](https://explorer.arc.io/address/0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9) (verified) | dispute 48 h · min measurement 1 h |
+| Arc mainnet (5042) — **v2** | [`0xAe32115c22ccdc7eb1654053023aCaD84050b89a`](https://explorer.arc.io/address/0xAe32115c22ccdc7eb1654053023aCaD84050b89a) (verified) | dispute 48 h · min measurement 1 h |
+| Arc testnet (5042002) — **v2** | [`0x0B7B9318CC762055414eEBf90d02D21936F08868`](https://explorer.testnet.arc.io/address/0x0B7B9318CC762055414eEBf90d02D21936F08868) (verified) | dispute 10 min · min measurement 5 min |
+| Arc mainnet — v1 (retired) | [`0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9`](https://explorer.arc.io/address/0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9) (verified) | launch campaign #1 (Oct 13–20) had no submissions → empty root posted, pool refunded |
+| Arc testnet — v1 (retired) | [`0x50519aFfe82591afd402c7F22ad9BC6DD2d86030`](https://explorer.testnet.arc.io/address/0x50519affe82591afd402c7f22ad9bc6dd2d86030) (verified) | first E2E + real-Short payout runs |
+
+v2 adds a per-campaign **scoring metric** (views, likes or comments) and optional **brand approval** of each Short, both recorded onchain in the campaign and `CampaignCreated` event.
 
 ## Trust model
 

@@ -40,7 +40,12 @@ Plan: [docs/plans/2026-10-12-clippool-plan.md](docs/plans/2026-10-12-clippool-pl
 - [x] Mainnet: operators funded; ClipPool deployed 0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9 (48h/1h, guardian = user wallet), Sourcify exact_match, explorer verified #launch
 - [x] Production on Arc mainnet at https://clippool.fun (switch --without-circle; sync from deploy block caught up) #launch
 - [ ] Circle LIVE App ID (needs Circle billing) → rerun switch script without the flag to enable Google wallets on mainnet #launch
-- [x] Mainnet launch campaign #1 live (5 USDC, closes Oct 20, snapshot Oct 21, payout ≈ Oct 23) — https://clippool.fun/c/1 #launch (user runs fund-moving steps)
+- [x] Mainnet launch campaign #1 (v1) ended with no submissions → empty root posted Oct 21, 5 USDC refunded to brand Nov 2 #launch
+- [x] ClipPool v2 (metric views/likes/comments + brand approval): testnet 0x0B7B9318CC762055414eEBf90d02D21936F08868 E2E PASSED; mainnet 0xAe32115c22ccdc7eb1654053023aCaD84050b89a (Sourcify exact_match), Vercel + DB switched, sync caught up #launch
+- [x] Brand review requires wallet signature; Next 16.4.3 (critical RCE advisories) #security
+- [x] Mainnet v2 campaign #1 live: 5 USDC, scored by likes, brand approval, closes Nov 9, snapshot Nov 10, payout ≈ Nov 12 — https://clippool.fun/c/1 #launch
+- [ ] Live leaderboard estimates by views even for likes/comments campaigns → store likes/comments in observations #backend
+- [ ] Transitive high advisories (undici, @grpc/grpc-js, zod, body-parser) #security
 
 ## Later
 - [ ] Phase 6: mainnet deploy + verify + pilot campaign #launch

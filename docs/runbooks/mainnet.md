@@ -44,7 +44,7 @@ cat deployments/5042.json        # address, deployBlock, disputeWindow 172800, m
 The script hard-codes 48h / 1h on chain 5042 and refuses overrides. Easiest path: `./scripts/fund-mainnet.sh` then `./scripts/deploy-mainnet.sh` (both confirm before sending). Verification uses
 **Sourcify** (`--verifier sourcify`) because `explorer.arc.io/api` is behind a Cloudflare challenge; Blockscout then shows the contract as verified.
 
-**Deployed 2026-10-13:** `0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9` (block 25,732,389), Sourcify exact match.
+**v2 deployed 2026-11-02:** `0xAe32115c22ccdc7eb1654053023aCaD84050b89a` (block 29,035,256), Sourcify exact match. v1 `0xDb224b1b1dA608d51d5D6D5C492d083c80F2Dfb9` (2026-10-13) is retired; its record is in `deployments/5042-v1.json`, and `scripts/refund-v1-mainnet.sh` reclaims a finished v1 campaign's remainder.
 
 **Check it:**
 ```bash
